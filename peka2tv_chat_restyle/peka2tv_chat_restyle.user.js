@@ -11,7 +11,7 @@
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // @require		http://code.jquery.com/jquery-latest.js
-// @resource	peka2tv_chat_style peka2tv_chat.css
+// @resource	peka2tv_chat_style https://raw.github.com/Winns/p2tv/master/peka2tv_chat_restyle/peka2tv_chat.css
 // ==/UserScript==
 
 GM_addStyle (GM_getResourceText ("peka2tv_chat_style"));
@@ -35,6 +35,7 @@ $(document).ready(function() {
 			}
 		}
 	// functions end
+
 	
 	
 	
@@ -93,8 +94,6 @@ $(document).ready(function() {
 				$( $('.p2tv_chat_adminsbox_msg').get().reverse() ).each (function () {
 					if (p2tv_adminsmsgs_duplicateCheck.hasOwnProperty( $(this).attr('data-unique') )) {
 						$(this).remove();
-						// del
-						unsafeWindow.console.log( 'del '+$(this).find('.text').html() );
 					} else {
 						p2tv_adminsmsgs_duplicateCheck[ $(this).attr('data-unique') ] = true;
 					}
@@ -115,7 +114,7 @@ $(document).ready(function() {
 		// handle chat admins msg's box open/close
 		$('#p2tv_chat_adminsbox_btn').on('click', function() {
 			p2tv_chat_box_openclose( '#p2tv_chat_adminsbox_wrapper' );
-			p2tv_getAdminsMsgsFromChat();
+			p2tv_getAdminsMsgsFromChat( true );
 		});
 		// handle chat admins msg's box close
 		$('#p2tv_chat_adminsbox_close').on('click', function() {
@@ -153,15 +152,10 @@ $(document).ready(function() {
 			
 			// remove duplicates
 			if ( linksSelect.length < linksLimit ) {
-				// del
-				unsafeWindow.console.log('del start ', linksSelect.length, '<', linksLimit);
-				
 				var p2tv_links_duplicateCheck = {};
 				$( $('.p2tv_chat_link_msg').get().reverse() ).each (function () {
 					if (p2tv_links_duplicateCheck.hasOwnProperty( $(this).attr('data-unique') )) {
 						$(this).remove();
-						// del
-						unsafeWindow.console.log( 'del '+$(this).find('a').html() );
 					} else {
 						p2tv_links_duplicateCheck[ $(this).attr('data-unique') ] = true;
 					}
@@ -172,8 +166,6 @@ $(document).ready(function() {
 			var linksInFrame = $('.p2tv_chat_link_msg');
 			if (linksInFrame.length > linksLimit) {
 				linksInFrame.slice(0, linksInFrame.length - linksLimit).remove();
-				//del
-				unsafeWindow.console.log('slice ', linksInFrame.length, '-', linksLimit);
 			}
 
 			if ( scroll == true ) {
@@ -184,7 +176,7 @@ $(document).ready(function() {
 		// handle chat links box open/close
 		$('#p2tv_chat_linksbox_btn').on('click', function() {
 			p2tv_chat_box_openclose( '#p2tv_chat_links_wrapper' );
-			p2tv_getLinksFromChat();
+			p2tv_getLinksFromChat( true );
 		});
 		// handle chat links box close
 		$('#p2tv_chat_links_close').on('click', function() {
@@ -245,7 +237,7 @@ $(document).ready(function() {
 		// handle msg's for user box open/close
 		$('#p2tv_chat_usermsg_btn').on('click', function() {
 			p2tv_chat_box_openclose( '#p2tv_chat_usermsg_wrapper' );
-			p2tv_getUserMsgFromChat();
+			p2tv_getUserMsgFromChat( true );
 		});
 		// handle chat links box close
 		$('#p2tv_chat_usermsg_close').on('click', function() {
@@ -298,10 +290,10 @@ $(document).ready(function() {
 	
 	// handele widgets scroll
 		$('.p2tv_chat_widget_content').scroll( function(){
-			if ( $(this).outerHeight() == ($(this).get(0).scrollHeight - $(this).scrollTop())) {
-				doScroll = false;
-			} else {
+			if ( $(this)[0].scrollHeight - $(this).scrollTop() < $(this).outerHeight()+10 ) {
 				doScroll = true;
+			} else {
+				doScroll = false;
 			}
 		});
 		
@@ -331,9 +323,9 @@ $(document).ready(function() {
 			}
 			
 			// new
-			p2tv_getAdminsMsgsFromChat( false );
-			p2tv_getLinksFromChat( false );
-			p2tv_getUserMsgFromChat( false );
+			p2tv_getAdminsMsgsFromChat();
+			p2tv_getLinksFromChat();
+			p2tv_getUserMsgFromChat();
 		}
 
 });
