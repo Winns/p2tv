@@ -1,0 +1,99 @@
+a { text-decoration: none !important; }
+a:hover { text-decoration: none !important; }
+
+input[type="text"]:hover { border: 1px solid #777 !important; }
+input[type="text"]:focus { border: 1px solid #369 !important; }
+
+input[type="text"] { outline: none; }
+
+
+
+/* multiply elements css */	
+	.p2tv_chat_widget_wrapper {
+		display: none;
+		
+		position: absolute;
+		top: 120px; left: 18px;
+		margin: 0 !important; padding: 0 !important;
+		width: 170px; height: 260px;
+		z-index: 150;
+		background: linear-gradient( to top, #000, #333) !important;
+		border: 1px solid #222;
+	}
+
+	.p2tv_chat_widget_close {
+		position: relative;
+		margin: 0 !important; padding: 0 4px !important;
+		height: 16px;
+		font-size: 8px !important;
+		line-height: 16px;
+		text-align: right;
+		color: #fff !important;
+		background: linear-gradient( to top, #369, #4284C7) !important;
+	}
+
+		.p2tv_chat_widget_close:hover { 
+			cursor: pointer;
+			background: linear-gradient( to top, #943225, #dd4b38) !important;
+		}
+		.p2tv_chat_widget_close em { float: left; }
+
+	.p2tv_chat_widget_msg {
+		margin: 0 0 4px 0 !important;
+		width: 100%;
+		border-bottom: 1px solid #333;
+	}
+
+	.p2tv_chat_widget_content {
+		margin: 0 auto !important; padding: 0 4px !important;
+		height: 244px;
+		overflow: auto;
+		word-wrap: break-word;
+	}
+
+	.p2tv_chat_widget_btn {
+		display: inline-block !important;
+		margin: 2px 0 2px 2px !important;
+		padding: 0 2px !important;
+		font-size: 8px !important;
+		font-weight: normal !important;
+		text-decoration: none !important;
+		border: 1px solid #888;
+		color: #fff !important;
+		background-color: #369 !important;
+	}
+		.p2tv_chat_widget_btn:hover { 
+			color: #369 !important;
+			background-color: #fff !important;
+		}
+
+	#p2tv_chat_smilesbox_btn { float: right; }
+	#p2tv_chat_configbox_btn, #p2tv_chat_linksbox_btn, #p2tv_chat_adminsbox_btn, #p2tv_chat_usermsg_btn { 
+		float: left; 	
+	}
+
+	
+/* chat config box */
+	#p2tv_chat_config_wrapper a { display: inline-block; }
+	#p2tv_chat_config_wrapper a, #p2tv_chat_config_wrapper span {
+		margin: 4px;
+	}
+	
+/* chat	links */
+	#p2tv_chat_links a:hover{ color: #fff; }
+	
+/* chat smile box  */
+	#p2tv_chat_smiles {
+		margin: 0 auto !important; padding: 0 !important;
+		height: 244px;
+		overflow: auto;
+		word-wrap: break-word;
+	}
+	#p2tv_chat_smiles img:hover { cursor: pointer; }	
+
+/* tools */
+	.clear{ clear: both; }
+
+
+	
+

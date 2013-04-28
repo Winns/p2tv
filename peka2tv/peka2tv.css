@@ -1,0 +1,440 @@
+a { text-decoration: none !important; }
+a:hover { text-decoration: none !important; }
+
+input[type="text"]:hover, input[type=password]:hover { border: 1px solid #777 !important; }
+input[type="text"]:focus, input[type=password]:focus { border: 1px solid #369 !important; }
+
+input[type="text"], input[type="password"], textarea, select { 
+	outline: none;
+}
+
+/* news */
+	.center a, #right-content a{
+		color: #369 !important;
+		text-decoration: none !important;
+	}
+		.center a:hover, #right-content a:hover{ 
+			color: #000 !important;
+			text-decoration: none !important;
+		}
+			
+
+	.p2tv_news_dateauthor {
+		position: relative;
+		float: left;
+		padding-left: 4px;
+		width: 180px;
+		text-align: center;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+		.p2tv_news_dateauthor a {
+			font-size: 22px !important;
+			text-decoration: none !important;
+			color: #693 !important;
+		}
+			.p2tv_news_dateauthor a:hover {
+				color: #369 !important;
+			}
+
+	.p2tv_news_tags {
+		position: relative;
+		float: right;
+		padding-right: 4px;
+		width: 280px;
+		text-align: right;
+	}
+		.p2tv_news_tags a {
+			display: inline-block !important;
+			margin: 2px !important;
+			padding: 0 2px !important;
+			font-size: 8px !important;
+			font-weight: normal !important;
+			text-decoration: none !important;
+			color: #fff !important;
+			background-color: #888 !important;
+			border: 1px solid #888;
+		}
+			.p2tv_news_tags a:hover { 
+				color: #888 !important;
+				background-color: #fff !important;
+			}
+
+	.p2tv_news_name	{
+		position: relative;
+		float: left;
+		width: 73%;
+		padding: 1%;
+	}	
+		.p2tv_news_name a {
+			font-size: 16px;
+			font-weight: bold;
+		}
+	.p2tv_news_vote { 
+		position: relative;
+		float: right;
+		width: 25%; height: 36px;
+		padding-top: 4px;
+		overflow: hidden;
+	}
+
+/* login */
+	#edit-name-wrapper, #edit-pass-wrapper, #edit-submit {
+		
+	}
+	#edit-name, #edit-pass { 
+		psition: relative !important;  float: left !important; 
+		margin: 2px 2px 0 2px !important;  padding: 0 4px !important; 
+		font-size: 10px !important;
+		letter-spacing: 2px;
+		
+		border: 1px solid #aaa;
+	}
+	#edit-submit {
+		float: right;
+		margin: 2px 2px 0 2px !important; padding: 0 12px !important; 
+		height: 15px !important;
+		font-size: 10px !important;
+		line-height: 15px !important;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		
+		color: #369 !important;
+	}
+		#edit-submit:hover { 
+			color: #333 !important; 
+			border: 1px solid #777 !important;
+		}
+		
+	#p2tv_login_info {
+		position: relative;
+		float: left;
+		width: 63%;
+		height: 100%;
+		text-align: right;
+	}
+		#p2tv_login_info a{
+			margin-right: 26px !important;
+		}
+		
+	#p2tv_login_wrapper {
+		position: relative;
+		float: right;
+		width: 37%;
+		height: 100%;
+	}
+		
+	
+/* main navigation */
+	#gamenav a { 
+		font-weight: normal !important;
+		color: #369 !important; 
+	}
+		#gamenav a:hover{ 
+			font-weight: normal !important;
+			color: #000 !important; 
+		}
+	
+	#nav li a:hover { color: #fff; }
+		
+/* tabs прайм-тайм, главная, фан и тд */
+	.quicktabs_tabs a { color: #777 !important; }
+		.qt_tab:hover, ul.quicktabs_tabs li.active a{ color: #fff !important; }
+		
+/* streams schedule */
+	#visual-sidebar ul ul li {
+		font-size: 9px;
+		font-style: italic;
+		max-height: 90px !important;
+		overflow: auto;
+	}
+	#visual-sidebar ul li .time {
+		color: #fff !important;
+		font-style: normal !important;
+	}
+	#visual-sidebar ul ul li h1, #visual-sidebar ul ul li h2, #visual-sidebar ul ul li h3, #visual-sidebar ul ul li h4 {
+		font-size: 10px !important;
+	}
+	#visual-sidebar .twitter-follow-button {
+		max-width: 100% !important;
+	}
+	#visual-sidebar ul li .time, #visual-sidebar ul li .time a {
+		font-size: 10px !important;
+	}
+
+/* forum post contrast */	
+	.block-vbbridge ul li.light {
+		background-color: #f0f0f0 !important;
+	}
+		.block-vbbridge ul li:hover{
+			background-color: #ddd !important;
+		}
+
+/* forum topics layout fix */
+	.block-vbbridge ul li .topic {
+		max-width: 100px !important;
+		word-wrap: break-word;
+	}
+	.block-vbbridge ul li .nickname {
+		width: 85px !important;
+		word-wrap: break-word;
+	}
+		
+/* Список фан-стримов онлайн и тд */
+	#visual-content div.top-news .user-stream-list strong {
+		color: #fff;
+		text-decoration: none;
+	}
+	
+/* rating */	
+	.vud-widget-updown {
+		margin: 0 !important; padding: 0 !important;
+		width: 100% !important;
+	}
+
+	.updown-score {
+		position: relative;
+		float: left;
+		margin: 0 !important; padding: 1px 0 0 0 !important;
+		width: 50px !important; height: 29px !important; 
+		font-size: 8px !important;
+		font-weight: normal !important;
+		line-height: normal !important;
+	}
+		.updown-current-score{
+			margin: 0 !important; padding: 0 !important;
+			font-size: 18px !important;
+			line-height: 18px !important;
+		}
+		
+	.up-inactive, .up-active, .down-inactive, .down-active {
+		display: inline-block;
+		margin: 0 0 20px 4px !important; padding: 0 !important;
+		height: 30px !important;
+		font-size: 10px !important;
+		line-height: 30px !important;
+	}
+		
+	.ctools-use-ajax-processed {
+		margin: 0 0 0 4px !important;
+		width: 30px !important; height: 30px !important;
+		border: none !important;
+	}
+
+	/* news footer */
+	.list-footer {
+		padding: 0 !important;
+	}
+		.list-footer ul {
+			margin: 10px 0 0 0 !important;
+		}
+
+	/* redesign block header */
+	.center-header, .column-top {
+		background: linear-gradient( to top, #369, #4284C7) !important;
+	}
+
+	.block-refresh-button a { 
+		text-transform: uppercase; 
+		font-weight: bold !important;
+	}
+		.left-column .block-refresh-button a, #right-content .block-refresh-button a {
+			color: #ccc !important;
+		}
+		.left-column .block-refresh-button a:hover, #right-content .block-refresh-button a:hover {
+			color: #fff !important;
+		}
+
+	
+	.center .center-header ul li a {
+		text-transform: uppercase;
+		font-size: 10px !important;
+		font-weight: bold !important;
+		color: #ccc !important;
+	}
+		.center .center-header ul li a:hover { color: #fff !important; }
+		
+	.center .center-header ul li a.active {
+		color: #fff !important;
+		cursor: default;
+		font-weight: bold !important;
+	}
+
+/* pop out (turn off) */
+	.ui-pnotify { width: 0 !important; height: 0 !important; overflow: hidden !important; }
+	.ui-pnotify-history-container { display: none !important; }
+	/*
+	.ui-pnotify-container {
+		width: 50px; height: 20px;
+		overflow: hidden;
+	}
+	*/
+
+/* fan streams */
+	#p2tv_fanstreams_menu {
+		padding: 4px;
+		color: #fff;
+		background: rgba(0,0,0, 0.85);
+	}
+	
+	.p2tv_sel_stream_tag {
+		background: linear-gradient( to top, #09111A, #1A334D) !important;
+	}
+
+	#user-stream ul, #user-stream ul li{ position: relative !important; }
+	#user-stream ul li {
+		margin: 1px 1px 0 0 !important; padding: 0 !important;
+		width: calc(33.3% - 2px) !important; height: 200px !important;
+		background-size: 100% 100%;
+	}
+
+	.p2tv_stream_playbtn {
+		display: none;
+		position: absolute;
+		margin: -120px 0 0 0 !important; padding: 0 !important;
+		height: 120px !important;
+		width: 100% !important;
+		z-index: 100;
+		background: url(/sites/all/themes/sc2tv/images/bg-user-stream-hover.png) no-repeat;
+		background-color: #000;
+		background-size: 100% auto;
+		background-position: center;
+	}
+		.p2tv_stream_preview_top:hover .p2tv_stream_playbtn {
+			display: block !important;
+			
+		}
+		
+	.p2tv_stream_title {
+		font-size: 10px;
+		font-style: normal !important;
+		color: #fff;
+	}
+
+	.p2tv_stream_preview_box {
+		position: relative;
+	}
+		.p2tv_stream_preview_top {
+			position: relative;
+			height: 120px;
+			overflow: hidden;
+			text-align: center;
+		}
+			.p2tv_stream_preview_top img {
+				display: inline !important;
+				margin: 2% 0 0 0;
+				height: 98%;
+			}
+		.p2tv_stream_preview_bottom {
+			position: relative;
+			margin: 2px; padding: 4px;
+			height: 67px;
+			overflow: auto;
+			text-align: center;
+			font-size: 10px;
+			border-top: 1px dashed #222;
+			color: #fff;
+			font-style: italic;
+			word-wrap: break-word;
+		}
+			.p2tv_stream_preview_bottom p {
+				color: #aaa;
+			}
+			
+	.p2tv_stream_gametag_box {
+		position: absolute;
+		top: 1px; right: 1px;
+		padding: 0 2px;
+		max-width: 96px; height: 16px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		line-height: 16px;
+		font-size: 10px;
+		color: #fff;
+		background: linear-gradient(to top, #471, #693) !important;
+		z-index: 150;
+		cursor: pointer;
+	}
+	
+	.p2tv_stream_streamer_box {
+		position: absolute;
+		top: 1px; left: 1px;
+		padding: 0 2px 0 0;
+		max-width: 96px; height: 16px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		line-height: 16px;
+		font-size: 10px;
+		color: #fff;
+		background: linear-gradient(to top, #147, #369) !important;
+		z-index: 150;
+	}
+	
+	.p2tv_stream_rating {
+		display: inline-block;
+		margin-right: 2px; padding: 0 2px;
+		height: 100%;
+		color: #333;
+		background-color: #fff;
+	}
+
+	.p2tv_tags {
+		display: inline-block;
+		margin: 2px;
+		padding-left: 2px;
+		font-size: 9px;
+		font-weight: normal;
+		text-decoration: none;
+		border: 1px solid #555;
+		color: #fff ;
+		background-color: #333;
+	}
+		.p2tv_tags:hover, .p2tv_tags_sel, .p2tv_fanstreams_sort_by_rating:hover, .p2tv_fanstreams_sort_by_rating_sel { 
+			color: #333 !important;
+			background-color: #fff !important;
+		}
+		
+	.p2tv_fanstreams_sort_by_rating {
+		display: inline-block;
+		margin: 2px;
+		padding: 0 2px;
+		font-size: 9px;
+		font-weight: normal;
+		text-decoration: none;
+		border: 1px solid #555;
+		color: #fff ;
+		background-color: #333;
+	}
+		
+		.p2tv_tags_count { 
+			margin-left: 2px;
+			padding: 0 2px;
+			color: #333;
+			background-color: #fff;
+		}
+			.p2tv_tags:hover .p2tv_tags_count, .p2tv_tags_count_sel { 
+				color: #fff !important;
+				background-color: #333 !important;
+			}
+			
+/* gogle search */
+	#google-cse-searchbox-form input[type="text"] {
+		margin: 4px 4px 4px 20px !important;
+		height: 16px !important;
+	}
+	
+	#google-cse-searchbox-form input[type="submit"] {
+		margin: 4px !important;
+		padding: 2px 16px !important;
+		height: 22px !important;
+	}
+	
+
+/* tools */
+.clear{ clear: both; }
+
+
+	
+
