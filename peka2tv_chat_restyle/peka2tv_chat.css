@@ -67,9 +67,19 @@ input[type="text"] { outline: none; }
 			background-color: #fff !important;
 		}
 
-	#p2tv_chat_smilesbox_btn { float: right; }
+	#p2tv_chat_smilesbox_btn { 
+		float: right;
+		-webkit-user-select: none;  
+		-moz-user-select: none;    
+		-ms-user-select: none;      
+		user-select: none;
+	}
 	#p2tv_chat_configbox_btn, #p2tv_chat_linksbox_btn, #p2tv_chat_adminsbox_btn, #p2tv_chat_usermsg_btn { 
-		float: left; 	
+		float: left;
+		-webkit-user-select: none;  
+		-moz-user-select: none;    
+		-ms-user-select: none;      
+		user-select: none;
 	}
 
 	
