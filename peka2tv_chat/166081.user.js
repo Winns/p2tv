@@ -2,16 +2,18 @@
 // @name        peka2tv chat
 // @namespace   sc2tv.ru
 // @description sc2tv.ru chat extra features
-// @author		Winns
-// @copyright	27.04.2013, Winns
+// @author      Winns
+// @copyright   27.04.2013, Winns
 // @include     http://chat.sc2tv.ru/*
-// @version     0.1b
+// @version     1.0
+// @updateURL   http://userscripts.org/scripts/source/166081.meta.js
+// @downloadURL https://userscripts.org/scripts/source/166081.user.js
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
-// @require		http://code.jquery.com/jquery-latest.js
-// @resource	peka2tv_chat_style https://raw.github.com/Winns/p2tv/master/peka2tv_chat_restyle/peka2tv_chat.css
+// @require     http://code.jquery.com/jquery-latest.min.js
+// @resource    peka2tv_chat_style https://raw.github.com/Winns/p2tv/master/peka2tv_chat_restyle/peka2tv_chat.css
 // ==/UserScript==
 
 GM_addStyle (GM_getResourceText ("peka2tv_chat_style"));
@@ -93,8 +95,6 @@ $(document).ready(function() {
 				$( $('.p2tv_chat_adminsbox_msg').get().reverse() ).each (function () {
 					if (p2tv_adminsmsgs_duplicateCheck.hasOwnProperty( $(this).attr('data-unique') )) {
 						$(this).remove();
-						// del
-						unsafeWindow.console.log( 'del '+$(this).find('.text').html() );
 					} else {
 						p2tv_adminsmsgs_duplicateCheck[ $(this).attr('data-unique') ] = true;
 					}
@@ -153,15 +153,10 @@ $(document).ready(function() {
 			
 			// remove duplicates
 			if ( linksSelect.length < linksLimit ) {
-				// del
-				unsafeWindow.console.log('del start ', linksSelect.length, '<', linksLimit);
-				
 				var p2tv_links_duplicateCheck = {};
 				$( $('.p2tv_chat_link_msg').get().reverse() ).each (function () {
 					if (p2tv_links_duplicateCheck.hasOwnProperty( $(this).attr('data-unique') )) {
 						$(this).remove();
-						// del
-						unsafeWindow.console.log( 'del '+$(this).find('a').html() );
 					} else {
 						p2tv_links_duplicateCheck[ $(this).attr('data-unique') ] = true;
 					}
@@ -172,8 +167,6 @@ $(document).ready(function() {
 			var linksInFrame = $('.p2tv_chat_link_msg');
 			if (linksInFrame.length > linksLimit) {
 				linksInFrame.slice(0, linksInFrame.length - linksLimit).remove();
-				//del
-				unsafeWindow.console.log('slice ', linksInFrame.length, '-', linksLimit);
 			}
 
 			if ( scroll == true ) {
@@ -269,7 +262,7 @@ $(document).ready(function() {
 		
 		// del old smile button and insert new
 		$('#smile-btn').remove();
-		$('<a href="javascript:// view smiles" id="p2tv_chat_smilesbox_btn" class="p2tv_chat_widget_btn" data-target="#p2tv_chat_smiles_wrapper" title="open/close">SMILES</a>')
+		$('<a href="javascript:// view smiles" id="p2tv_chat_smilesbox_btn" class="p2tv_chat_widget_btn" data-target="#p2tv_chat_smiles_wrapper" title="open/close">SML</a>')
 		.appendTo( '#chat-form' );
 		
 		// handle chat smile box open/close

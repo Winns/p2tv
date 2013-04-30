@@ -77,6 +77,75 @@ input[type="text"], input[type="password"], textarea, select {
 		padding-top: 4px;
 		overflow: hidden;
 	}
+	
+/* news widgets */
+	.p2tv_news_widgets_wrapper {
+		height: 20px;
+		line-height: 20px;
+	}
+	.p2tv_news_widgets_cell {
+		float: left;
+		margin-right: 8px;
+	}
+	.p2tv_news_social {
+		display: none;
+		
+		position: absolute;
+		top: -126px; left: 20px;
+		min-width: 100px; min-height: 100px;
+		border: 1px solid #777;
+		border-radius: 3px;
+		background: #fff0bb;
+	}
+		.p2tv_news_social:before {
+			content: "";
+			position: absolute;
+			border-left: 10px solid transparent;
+			border-right: 10px solid transparent;
+			border-top: 10px solid #777;
+			left: 10px;
+			bottom: -10px;
+		}
+		
+	.btn-favorite {
+		margin: 0 10px 0 0 !important; padding: 0 !important;
+		width: auto !important; height: 20px !important;
+		color: #693;
+		background: none !important; 
+	}
+		.subscribed {
+			color: #936 !important; 
+		}
+	.list-footer {
+		position: relative;
+	}
+	.p2tv_open_news_solial {
+		cursor: pointer;
+		color: #555;
+	}
+	
+	.p2tv_widget_content {
+		padding: 4px;
+		overflow: auto;
+		word-wrap: break-word;
+	}
+	
+	.p2tv_widget_close {
+		position: relative;
+		margin: 0; padding: 0 4px;
+		height: 16px;
+		font-size: 8px;
+		line-height: 16px;
+		text-align: right;
+		color: #fff;
+		background: linear-gradient( to top, #369, #4284C7);
+	}
+
+		.p2tv_widget_close:hover { 
+			cursor: pointer;
+			background: linear-gradient( to top, #943225, #dd4b38);
+		}
+		.p2tv_widget_close em { float: left; }
 
 /* login */
 	#edit-name-wrapper, #edit-pass-wrapper, #edit-submit {
@@ -419,7 +488,7 @@ input[type="text"], input[type="password"], textarea, select {
 				background-color: #333 !important;
 			}
 			
-/* gogle search */
+/* google search */
 	#google-cse-searchbox-form input[type="text"] {
 		margin: 4px 4px 4px 20px !important;
 		height: 16px !important;

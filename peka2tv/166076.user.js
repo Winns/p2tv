@@ -2,16 +2,18 @@
 // @name        peka2tv
 // @namespace   sc2tv.ru http://userscripts.org/users/515123
 // @description sc2tv.ru redesign + extra features
-// @author		Winns
-// @copyright	27.04.2013, Winns
+// @author      Winns
+// @copyright   27.04.2013, Winns
 // @include     http://sc2tv.ru/*
-// @version     0.1b
+// @version     1.0
+// @updateURL   http://userscripts.org/scripts/source/166076.meta.js
+// @downloadURL https://userscripts.org/scripts/source/166076.user.js
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
-// @require		http://code.jquery.com/jquery-latest.js
-// @resource	peka2tv_style peka2tv.css
+// @require     http://code.jquery.com/jquery-latest.min.js
+// @resource    peka2tv_style https://raw.github.com/Winns/p2tv/master/peka2tv/peka2tv.css
 // ==/UserScript==
 
 GM_addStyle (GM_getResourceText ("peka2tv_style"));
@@ -62,19 +64,17 @@ $(document).ready(function() {
 			p2tv.isLogged = true;
 		}
 
+	// fix fullscreen button pos
+	if ( p2tv.isLogged == false ) {
+		$('#chat-switch-screen-btn img').css({ 'bottom': '16px' });
+	}
+	
 	// hide "свежие комментарии"
 		$("[id*=block-sc2tv_recentcomments]").hide();
-	
-	// hide popouts
-	// $('#pnotify-disable').attr('checked', false);
-	// $('.ui-pnotify-history-container').hide();
-	
+
 	// hide tags
 		$("[id*=block-tagadelic]").hide();
-	
-	// hide google search
-	// $("[id*=block-google_cse]").hide();
-	
+
 	// news design
 		// redesign news text
 			$('#content p').css({
@@ -91,70 +91,108 @@ $(document).ready(function() {
 					});
 				});
 			}
-		
-		// redesign news header
-			var newsHeader	= $('.list-header');
-			
-			newsHeader.css('background-color', '#f0f0f0');
-			
-			newsHeader.each(function(){
-				var newsDate = $(this).find('.news-time').html(),
-					newsAuthor = $(this).find('.author').html();
-					
-				$(this).find('.author').remove();
-				var newsTags = ''
+
+		$('.fullnews').each(function() {
+			// news header
+				var newsHeader	= $(this).find('.list-header');
 				
-				$(this).find('li').each(function(){
+				// remove from cycle
+				newsHeader.css('background-color', '#f0f0f0');
+				
+				var newsDate = newsHeader.find('.news-time').html(),
+					newsAuthor = newsHeader.find('.author').html();
+					
+				newsHeader.find('.author').remove();
+				
+				var newsTags = ''
+				newsHeader.find('li').each(function(){
 					newsTags += $(this).html();
 				});
-				
-	
-				$(this).html(
+
+				newsHeader.html(
 					'<div class="p2tv_news_dateauthor">'+ newsAuthor +'<br>'+ newsDate +'</div>'
 					+'<div class="p2tv_news_tags">'+ newsTags +'</div>'
 				);
-			});
-			
-		// redesign news body
-			var news = $('.list-content');
-			
-			news.each(function(){
-					var newsName = $(this).find('h2:first').html(),
-						newsVoteWidget = $(this).find('[id*=widget-node]'),
-						newsVoteWidgetScore = newsVoteWidget.find('.updown-current-score').html();
-						
-					// delete old name
-					$(this).find('h2:first').remove();
 
-					// print new name and vote
-					$(this).prepend(
-						'<div class="p2tv_news_name">'+ newsName +'</div>'
-						+'<div class="p2tv_news_vote">'
-						+'<div class="p2tv_news_vote_temp vud-widget vud-widget-updown"></div>'
+			// news body
+				var news = $(this).find('.list-content'),
+					newsName = news.find('h2:first').html(),
+					newsVoteWidget = news.find('[id*=widget-node]'),
+					newsVoteWidgetScore = newsVoteWidget.find('.updown-current-score').html();
+					
+				// delete old name
+				news.find('h2:first').remove();
+
+				// print new name and vote
+				news.prepend(
+					'<div class="p2tv_news_name">'+ newsName +'</div>'
+					+'<div class="p2tv_news_vote">'
+					+'<div class="p2tv_news_vote_temp vud-widget vud-widget-updown"></div>'
+					+'</div>'
+					+'<div class="clear"></div>'
+				);
+				
+				news.find('.p2tv_news_vote_temp').attr('id', newsVoteWidget.attr('id') );
+
+				// twitter
+				newsTwitter = news.find( '.twitwrap' );
+				
+				// vk
+				newsVK = news.find( '[id*=vkshare]' );
+				
+				// favorite
+				newsFavorite = news.find( '.btn-favorite' );
+				newsFavorite.attr('title','добавить в избранное');
+				newsFavorite.html('&hearts; в избранное');
+				newsFavorite.addClass('p2tv_news_widgets_cell');
+				
+				// vote
+				newsVoteWidget.find('div').first().appendTo( news.find('.p2tv_news_vote_temp') );
+				
+			// news footer
+				var newsFooter = $(this).find('.list-footer');
+				
+				// create widgets wgapper
+				newsFooter.append( 
+					'<div class="p2tv_news_widgets_wrapper">'
+						+'<div class="p2tv_news_social">'
+							+'<div class="p2tv_widget_close"><em>ПОДЕЛИТСЯ</em>CLOSE</div>'
+							+'<div class="p2tv_widget_content"></div>'
 						+'</div>'
-						+'<div class="clear"></div>'
-					);
-					
-					$(this).find('.p2tv_news_vote_temp').attr('id', newsVoteWidget.attr('id') );
-
-					// del twitter
-					$(this).find( '.twitwrap' ).remove();
-					
-					// del vk
-					$(this).find( '[id*=vkshare]' ).remove();
-					
-					// del favorite
-					$(this).find( '.btn-favorite' ).remove();
-					
-					// vote
-					newsVoteWidget.find('div').first().appendTo( $(this).find('.p2tv_news_vote_temp') );
-			});
+					+'</div>' );
+				
+				// push favorite
+				$(newsFavorite).appendTo( newsFooter.find('.p2tv_news_widgets_wrapper') );
+				
+				// create social networks wrapper
+				$('<div class="p2tv_news_widgets_cell p2tv_open_news_solial">соц. сети</div>').appendTo( newsFooter.find('.p2tv_news_widgets_wrapper') );
+				
+				// push twiter and vk
+				newsTwitter.appendTo( newsFooter.find('.p2tv_news_social .p2tv_widget_content') );
+				newsVK.appendTo( newsFooter.find('.p2tv_news_social .p2tv_widget_content') );
+				
+		});
 			
-		// change news score pos if not logged
+		// handle "соц. сети" click
+			$('.p2tv_open_news_solial').on('click', function() {
+				var e = $(this).parent().find('.p2tv_news_social');
+				e.css( 'left', $(this).position().left );
+				if ( e.is(':visible') ) { 
+					e.hide();
+				} else { 
+					e.show(); 
+				}
+			});
+			$('.p2tv_news_social .p2tv_widget_close').on('click', function() {
+				$(this).parent().hide();
+			});
+
+			
+		// change news rating pos if not logged
 			if ( p2tv.isLogged == false ) {
 				$('.p2tv_news_vote_temp').find('.updown-score').css('float', 'right');
 			}
-			
+
 	// fan streams
 		$('#user-stream').prepend('<div id="p2tv_fanstreams_menu"></div>');
 		$('#user-stream ul:first').addClass('p2tv_fanStreams_ul');
