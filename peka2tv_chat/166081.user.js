@@ -13,7 +13,7 @@
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
 // @require     http://code.jquery.com/jquery-latest.min.js
-// @resource    peka2tv_chat_style https://raw.github.com/Winns/p2tv/master/peka2tv_chat_restyle/peka2tv_chat.css
+// @resource    peka2tv_chat_style https://raw.github.com/Winns/p2tv/master/peka2tv_chat/peka2tv_chat.css
 // ==/UserScript==
 
 GM_addStyle (GM_getResourceText ("peka2tv_chat_style"));
