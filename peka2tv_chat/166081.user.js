@@ -37,8 +37,18 @@ $(document).ready(function() {
 				e.fadeIn(150);
 			}
 		}
-		
-		
+
+		function p2tv_chat_checkInputLength() {
+			if ( ($('[name="chat-text"]').val().length) > 21 ) {
+				$('#chat').css('height', (chatHeight - 36) + 'px');
+				$('#chat').scrollTop( $('#chat').prop('scrollHeight') );
+				$('[name="chat-text"]').css('height', '54px');
+			} else {
+				$('#chat').stop().css('height', chatHeight + 'px');
+				$('#chat').scrollTop( $('#chat').prop('scrollHeight') );
+				$('[name="chat-text"]').css('height', '18px');
+			}
+		}
 	// functions end
 	
 	
@@ -52,19 +62,8 @@ $(document).ready(function() {
 		$('[name="chat-text"]').replaceWith('<textarea name="chat-text" class="chat-text" spellcheck="false"></textarea>');
 		
 		// handle input size 
-		function checkInputLength() {
-			if ( ($('[name="chat-text"]').val().length) > 21 ) {
-				$('#chat').css('height', (chatHeight - 36) + 'px');
-				$('#chat').scrollTop( $('#chat').prop('scrollHeight') );
-				$('[name="chat-text"]').css('height', '54px');
-			} else {
-				$('#chat').stop().css('height', chatHeight + 'px');
-				$('#chat').scrollTop( $('#chat').prop('scrollHeight') );
-				$('[name="chat-text"]').css('height', '18px');
-			}
-		}
 		$('[name="chat-text"]').on('keyup keypress blur focus change', function(){
-			checkInputLength();
+			p2tv_chat_checkInputLength();
 		});
 		// force textarea message submit on enter
 		$('[name="chat-text"]').on('keypress', function(e){
@@ -314,7 +313,7 @@ $(document).ready(function() {
 		// handle smile insert on click
 		$('#p2tv_chat_smiles img').on('click', function() {
 			$('#p2tv_chat_smiles_wrapper').fadeOut(300);
-			checkInputLength();
+			p2tv_chat_checkInputLength();
 		});
 		// put cursor at message end
    		$('#p2tv_chat_smiles img').on('mouseup', function() {
