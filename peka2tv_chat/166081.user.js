@@ -37,6 +37,8 @@ $(document).ready(function() {
 				e.fadeIn(150);
 			}
 		}
+		
+		
 	// functions end
 	
 	
@@ -50,8 +52,8 @@ $(document).ready(function() {
 		$('[name="chat-text"]').replaceWith('<textarea name="chat-text" class="chat-text" spellcheck="false"></textarea>');
 		
 		// handle input size 
-		$('[name="chat-text"]').on('keyup keypress blur focus change', function(){
-			if ( ($(this).val().length) > 21 ) {
+		function checkInputLength() {
+			if ( ($('[name="chat-text"]').val().length) > 21 ) {
 				$('#chat').css('height', (chatHeight - 36) + 'px');
 				$('#chat').scrollTop( $('#chat').prop('scrollHeight') );
 				$('[name="chat-text"]').css('height', '54px');
@@ -60,6 +62,9 @@ $(document).ready(function() {
 				$('#chat').scrollTop( $('#chat').prop('scrollHeight') );
 				$('[name="chat-text"]').css('height', '18px');
 			}
+		}
+		$('[name="chat-text"]').on('keyup keypress blur focus change', function(){
+			checkInputLength();
 		});
 		// force textarea message submit on enter
 		$('[name="chat-text"]').on('keypress', function(e){
@@ -309,8 +314,11 @@ $(document).ready(function() {
 		// handle smile insert on click
 		$('#p2tv_chat_smiles img').on('click', function() {
 			$('#p2tv_chat_smiles_wrapper').fadeOut(300);
-			$('[name=chat-text]').val( $('[name=chat-text]').val() );
-			//$('[name=chat-text]').val( $('[name=chat-text]').val() + $(this).attr('title') );
+			checkInputLength();
+		});
+		// put cursor at message end
+   		$('#p2tv_chat_smiles img').on('mouseup', function() {
+			$('[name=chat-text]').focus();
 		});
 		
 		
