@@ -309,6 +309,7 @@ $(document).ready(function() {
 		// handle smile insert on click
 		$('#p2tv_chat_smiles img').on('click', function() {
 			$('#p2tv_chat_smiles_wrapper').fadeOut(300);
+			$('[name=chat-text]').val( $('[name=chat-text]').val() );
 			//$('[name=chat-text]').val( $('[name=chat-text]').val() + $(this).attr('title') );
 		});
 		
