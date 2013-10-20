@@ -9,6 +9,17 @@ input[type="text"] { outline: none; }
 
 
 /* multiply elements css */	
+	/* chat input */
+	.chat-text {
+		width: 191px !important;
+		height: 18px;
+		resize: none;
+		border: none;
+		font-size: 14px !important; 
+		line-height: 18px !important;
+		font-family: Lucida Console !important;
+	}
+
 	.p2tv_chat_widget_wrapper {
 		display: none;
 		

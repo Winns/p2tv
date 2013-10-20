@@ -8,6 +8,13 @@ input[type="text"], input[type="password"], textarea, select {
 	outline: none;
 }
 
+/* header navigation menu */
+	#nav li a { 
+		font-size: 11px !important; 
+		text-transform: none !important; 
+		color: #333;
+	}
+
 /* news */
 	.center a, #right-content a{
 		color: #369 !important;
@@ -213,7 +220,6 @@ input[type="text"], input[type="password"], textarea, select {
 /* streams schedule */
 	#visual-sidebar ul ul li {
 		font-size: 9px;
-		font-style: italic;
 		max-height: 90px !important;
 		overflow: auto;
 		word-wrap: break-word;
@@ -499,6 +505,17 @@ input[type="text"], input[type="password"], textarea, select {
 		margin: 4px !important;
 		padding: 2px 16px !important;
 		height: 22px !important;
+	}
+	
+/* footer */
+	#footer { 
+		height: auto !important;
+		background-size: contain !important;
+	}
+	.foot-warning {
+		font-weight: normal !important;
+		color: #333 !important;
+		background-color: #e1e1e1 !important;
 	}
 	
 

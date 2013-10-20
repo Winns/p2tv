@@ -12,7 +12,7 @@
 // @grant       GM_setValue
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
-// @require     http://code.jquery.com/jquery-latest.min.js
+// @require     http://code.jquery.com/jquery-2.0.2.min.js
 // @resource    peka2tv_chat_style https://raw.github.com/Winns/p2tv/master/peka2tv_chat/peka2tv_chat.css
 // ==/UserScript==
 
@@ -23,7 +23,8 @@ $(document).ready(function() {
 		var msgsLimit	= 20,
 			linksLimit	= 20,
 			uMsgLimit	= 20,
-			doScroll	= true;
+			doScroll	= true,
+			chatHeight	= $('#chat').height();
 	// variables end
 
 	// functions begin
@@ -39,6 +40,37 @@ $(document).ready(function() {
 	// functions end
 	
 	
+	// handle chat input size
+		// get chat height on fullscreen button click
+		$('#chat-switch-screen-btn').on('mouseup', function(){
+			chatHeight = $('#chat').height();
+		});
+
+		// replace chat input with textarea 
+		$('[name="chat-text"]').replaceWith('<textarea name="chat-text" class="chat-text" spellcheck="false"></textarea>');
+		
+		// handle input size 
+		$('[name="chat-text"]').on('keyup keypress blur focus change', function(){
+			if ( ($(this).val().length) > 21 ) {
+				$('#chat').css('height', (chatHeight - 36) + 'px');
+				$('#chat').scrollTop( $('#chat').prop('scrollHeight') );
+				$('[name="chat-text"]').css('height', '54px');
+			} else {
+				$('#chat').stop().css('height', chatHeight + 'px');
+				$('#chat').scrollTop( $('#chat').prop('scrollHeight') );
+				$('[name="chat-text"]').css('height', '18px');
+			}
+		});
+		// force textarea message submit on enter
+		$('[name="chat-text"]').on('keypress', function(e){
+			if(e.which == 13){
+				e.preventDefault();
+				unsafeWindow.WriteMessage();
+				return false; 
+			}
+		});
+		
+
 	
 	// config frame
 		// create config box
@@ -80,7 +112,7 @@ $(document).ready(function() {
 			if ( typeof(scroll)==='undefined' ) { scroll = doScroll; }
 
 			// push adms msgs
-			var msgsSelect = $('#chat .mess .nick').not('.user-2,.user-8,.user-10,.user-14'); // .user-14 - fan/real streamer
+			var msgsSelect = $('#chat .mess .nick').not('.role-user');
 			msgsSelect.each(function() {
 				$('<div class="p2tv_chat_adminsbox_msg p2tv_chat_widget_msg" data-unique="'+ $(this).parent().attr('class') +'">'
 						+$(this).prop('outerHTML')
@@ -277,7 +309,7 @@ $(document).ready(function() {
 		// handle smile insert on click
 		$('#p2tv_chat_smiles img').on('click', function() {
 			$('#p2tv_chat_smiles_wrapper').fadeOut(300);
-			$('input[name=chat-text]').val().append( $(this).attr('title') );
+			//$('[name=chat-text]').val( $('[name=chat-text]').val() + $(this).attr('title') );
 		});
 		
 		

@@ -12,7 +12,7 @@
 // @grant       GM_setValue
 // @grant       GM_addStyle
 // @grant       GM_getResourceText
-// @require     http://code.jquery.com/jquery-latest.min.js
+// @require     http://code.jquery.com/jquery-2.0.2.min.js
 // @resource    peka2tv_style https://raw.github.com/Winns/p2tv/master/peka2tv/peka2tv.css
 // ==/UserScript==
 
@@ -74,7 +74,7 @@ $(document).ready(function() {
 
 	// hide tags
 		$("[id*=block-tagadelic]").hide();
-
+		
 	// news design
 		// redesign news text
 			$('#content p').css({
