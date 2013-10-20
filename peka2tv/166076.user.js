@@ -5,7 +5,7 @@
 // @author      Winns
 // @copyright   27.04.2013, Winns
 // @include     http://sc2tv.ru/*
-// @version     1.0
+// @version     1.1
 // @updateURL   http://userscripts.org/scripts/source/166076.meta.js
 // @downloadURL https://userscripts.org/scripts/source/166076.user.js
 // @grant       GM_getValue
