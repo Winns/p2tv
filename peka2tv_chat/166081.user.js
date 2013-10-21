@@ -49,6 +49,11 @@ $(document).ready(function() {
 				$('[name="chat-text"]').css('height', '18px');
 			}
 		}
+		
+		function p2tv_chat_setCursorToEnd(e) {
+			e.focus();
+			e[0].setSelectionRange(e.val().length, e.val().length);
+		}
 	// functions end
 	
 	
@@ -314,12 +319,8 @@ $(document).ready(function() {
 		$('#p2tv_chat_smiles img').on('click', function() {
 			$('#p2tv_chat_smiles_wrapper').fadeOut(300);
 			p2tv_chat_checkInputLength();
+			p2tv_chat_setCursorToEnd( $('.chat-text') );
 		});
-		// put cursor at message end
-   		$('#p2tv_chat_smiles img').on('mouseup', function() {
-			$('[name=chat-text]').focus();
-		});
-		
 		
 		
 	// handle widgets close
@@ -367,6 +368,13 @@ $(document).ready(function() {
 			p2tv_getAdminsMsgsFromChat( false );
 			p2tv_getLinksFromChat( false );
 			p2tv_getUserMsgFromChat( false );
+		}
+		
+	// chrome cursor position fix (textarea)
+		unsafeWindow.otvet = function(nick){
+			$('.chat-text').val('[b]'+nick+'[/b], ');
+			p2tv_chat_setCursorToEnd( $('.chat-text') );
+			$('.menushka').remove();
 		}
 
 });
