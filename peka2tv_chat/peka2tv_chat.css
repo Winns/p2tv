@@ -5,7 +5,7 @@ input[type="text"]:hover { border: 1px solid #777 !important; }
 input[type="text"]:focus { border: 1px solid #369 !important; }
 
 input[type="text"], input[type="password"], textarea, select { 
-    outline: none;
+    outline: none !important;
 }
 
 /* multiply elements css */	
