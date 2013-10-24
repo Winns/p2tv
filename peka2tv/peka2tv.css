@@ -85,6 +85,30 @@ input[type="text"], input[type="password"], textarea, select {
 		overflow: hidden;
 	}
 	
+	/* spoiler */
+	.content-spoiler {
+		color: #222;
+		background-color: #e0e0e0;
+	}
+	p.hand { text-decoration: none; }
+
+/* news comments */
+	#edit-comment {
+		width: 100%;
+		resize: vertical;
+		overflow: auto;
+		border: 1px solid #aaa;
+		background: #e3e3e3;
+	}
+			#edit-comment:hover { border: 1px solid #888; }
+			#edit-comment:focus { border: 1px solid #888; }	
+
+	#comments .comment:hover {
+		background-color: #ddd;
+	}
+	
+	
+	
 /* news widgets */
 	.p2tv_news_widgets_wrapper {
 		height: 20px;
@@ -102,7 +126,7 @@ input[type="text"], input[type="password"], textarea, select {
 		min-width: 100px; min-height: 100px;
 		border: 1px solid #777;
 		border-radius: 3px;
-		background: #fff0bb;
+		background: #e3e3e3;
 	}
 		.p2tv_news_social:before {
 			content: "";
@@ -214,7 +238,10 @@ input[type="text"], input[type="password"], textarea, select {
 	#nav li a:hover { color: #fff; }
 		
 /* tabs прайм-тайм, главная, фан и тд */
-	.quicktabs_tabs a { color: #777 !important; }
+	.quicktabs_tabs a { 
+		font-size: 9px !important; 
+		color: #999 !important; 
+	}
 		.qt_tab:hover, ul.quicktabs_tabs li.active a{ color: #fff !important; }
 		
 /* streams schedule */
@@ -309,24 +336,27 @@ input[type="text"], input[type="password"], textarea, select {
 	.center-header, .column-top {
 		background: linear-gradient( to top, #369, #4284C7) !important;
 	}
+		.center-header h2, .column-top h2 {
+			font-size: 10px !important;
+		}
 
 	.block-refresh-button a { 
 		text-transform: uppercase; 
 		font-weight: bold !important;
 	}
 		.left-column .block-refresh-button a, #right-content .block-refresh-button a {
-			color: #ccc !important;
+			color: transparent !important;
 		}
 		.left-column .block-refresh-button a:hover, #right-content .block-refresh-button a:hover {
-			color: #fff !important;
+			color: transparent !important;
 		}
 
 	
 	.center .center-header ul li a {
 		text-transform: uppercase;
-		font-size: 10px !important;
+		font-size: 9px !important;
 		font-weight: bold !important;
-		color: #ccc !important;
+		color: #333 !important;
 	}
 		.center .center-header ul li a:hover { color: #fff !important; }
 		
