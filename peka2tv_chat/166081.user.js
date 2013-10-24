@@ -5,7 +5,7 @@
 // @author      Winns
 // @copyright   27.04.2013, Winns
 // @include     http://chat.sc2tv.ru/*
-// @version     1.1.3
+// @version     1.1.4
 // @updateURL   http://userscripts.org/scripts/source/166081.meta.js
 // @downloadURL https://userscripts.org/scripts/source/166081.user.js
 // @grant       GM_getValue
@@ -50,7 +50,8 @@ $(document).ready(function() {
 			}
 		}
 		
-		function p2tv_chat_setCursorToEnd(e) {
+		function p2tv_chat_setCursorToEnd() {
+			var e = $('[name="chat-text"]');
 			e.focus();
 			e[0].setSelectionRange(e.val().length, e.val().length);
 		}
@@ -319,7 +320,7 @@ $(document).ready(function() {
 		$('#p2tv_chat_smiles img').on('click', function() {
 			$('#p2tv_chat_smiles_wrapper').fadeOut(300);
 			p2tv_chat_checkInputLength();
-			p2tv_chat_setCursorToEnd( $('.chat-text') );
+			p2tv_chat_setCursorToEnd();
 		});
 		
 		
@@ -370,15 +371,16 @@ $(document).ready(function() {
 			p2tv_getUserMsgFromChat( false );
 		}
 		
-		// chrome cursor position fix (textarea)
-			// nick
-			unsafeWindow.otvet = function(nick){
-				$('.chat-text').val('[b]'+nick+'[/b], ');
-				p2tv_chat_setCursorToEnd( $('.chat-text') );
-				$('.menushka').remove();
-			}
-			// streamer
-			$('#chat-streamer-msg').on('click', function(){
-				p2tv_chat_setCursorToEnd( $('.chat-text') );
-			});
+	// chrome cursor position fix (textarea)
+		var orgFocus = unsafeWindow.$.fn.focus;
+		unsafeWindow.$.fn.focus = function( arg1, arg2 ){
+			// call original Function
+			var result = orgFocus.apply( this, arguments );
+	
+			// do additional functionality
+			p2tv_chat_checkInputLength();
+			p2tv_chat_setCursorToEnd();
+	
+			return result;
+		}
 });
