@@ -5,7 +5,7 @@
 // @author      Winns
 // @copyright   27.04.2013, Winns
 // @include     http://sc2tv.ru/*
-// @version     1.2
+// @version     1.2.1
 // @updateURL   http://userscripts.org/scripts/source/166076.meta.js
 // @downloadURL https://userscripts.org/scripts/source/166076.user.js
 // @grant       GM_getValue
@@ -82,12 +82,12 @@ $(document).ready(function() {
 				'line-height': '16px'
 			});
 		
-		// reduce news images size by 50%
+		// reduce news images size
 			if ( p2tv.openNews == false ) {
 				$('.center img').each(function(){
 					$(this).css({
-						'width': ( $(this).width()/2 ),
-						'height': ( $(this).height()/2 )
+						'width': ( $(this).width()/1.5 ),
+						'height': ( $(this).height()/1.5 )
 					});
 				});
 			}
@@ -117,7 +117,7 @@ $(document).ready(function() {
 			// news body
 				var news = $(this).find('.list-content'),
 					newsName = news.find('h2:first').html(),
-					newsVoteWidget = news.find('[id*=widget-node]'),
+					newsVoteWidget = news.find('[id*=widget-node].vud-widget'),
 					newsVoteWidgetScore = newsVoteWidget.find('.updown-current-score').html();
 					
 				// delete old name

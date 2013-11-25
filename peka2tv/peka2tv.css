@@ -177,6 +177,11 @@ input[type="text"], input[type="password"], textarea, select {
 			background: linear-gradient( to top, #943225, #dd4b38);
 		}
 		.p2tv_widget_close em { float: left; }
+		
+/* prem vote widget */
+	.prem-score .prem-sup a, .prem-score .prem-rate a { 
+		color: #fff !important;
+	}
 
 /* login */
 	#edit-name-wrapper, #edit-pass-wrapper, #edit-submit {
@@ -318,7 +323,7 @@ input[type="text"], input[type="password"], textarea, select {
 		line-height: 30px !important;
 	}
 		
-	.ctools-use-ajax-processed {
+	.p2tv_news_vote_temp .ctools-use-ajax-processed {
 		margin: 0 0 0 4px !important;
 		width: 30px !important; height: 30px !important;
 		border: none !important;
