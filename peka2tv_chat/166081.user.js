@@ -5,7 +5,7 @@
 // @author      Winns
 // @copyright   27.04.2013, Winns
 // @include     http://chat.sc2tv.ru/*
-// @version     1.1.4
+// @version     1.1.5
 // @updateURL   http://userscripts.org/scripts/source/166081.meta.js
 // @downloadURL https://userscripts.org/scripts/source/166081.user.js
 // @grant       GM_getValue
@@ -245,7 +245,7 @@ $(document).ready(function() {
 			if ( typeof(scroll)==='undefined' ) { scroll = doScroll; }
 
 			// push user msgs
-			var uMsgSelect = $('#chat .mess .text[style="color:#f36223"]');
+			var uMsgSelect = $('#chat .mess .message-to-user');
 			uMsgSelect.each(function() {
 				$('<div class="p2tv_chat_usermsg_msg p2tv_chat_widget_msg" data-unique="'+ $(this).parent().attr('class') +'">'
 						+$(this).parent().find('.nick').prop('outerHTML')
