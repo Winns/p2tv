@@ -436,12 +436,18 @@ $(document).ready(function() {
 			var html = '', 
 				oldMsgs = $(cfg.el.chat).find('.wchat-msg'),
 				newMsgs;
-				
+	
 			if (scrollAnimation === undefined) { scrollAnimation = true; }
 				
 			// form msgs html
-			for (var key in data) {
-				html = templates.chatMSG( data[key] ) + html;
+			var keys = Object.keys( data ), k, 
+				length = keys.length;
+			keys.sort();
+			
+			for (var i=length-1; i >= 0; i--) {
+				k = keys[i];
+
+				html = templates.chatMSG( data[k] ) + html;
 			}
 			// append new msgs
 			$(cfg.el.chat).append( html );
