@@ -151,13 +151,13 @@ $(document).ready(function() {
 				privateSmile = '';
 				
 				// check if user have access to smile
-				if ( userLoggedIn ){
-					for (var j=0; j < cfg.userInfo.roleIds.length; j++){
-						if (cfg.smiles[ i ].roles.indexOf( cfg.userInfo.roleIds[ j ] ) == -1) {
-							privateSmile = ' class="wchat-smile-private" title="Платные смайлы"';
-						}
-					}
-				}
+				//if ( userLoggedIn ){
+				//	for (var j=0; j < cfg.userInfo.roleIds.length; j++){
+				//		if (cfg.smiles[ i ].roles.indexOf( cfg.userInfo.roleIds[ j ] ) == -1) {
+				//			privateSmile = ' class="wchat-smile-private" title="Платные смайлы"';
+				//		}
+				//	}
+				//}
 				
 				smilesHtml += '<div'+ privateSmile +'><img src="/img/'+ cfg.smiles[ i ].img +'" title="'+ cfg.smiles[ i ].code +'" /></div>';
 			}
