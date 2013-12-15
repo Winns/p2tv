@@ -4,6 +4,7 @@
 	* { margin: 0; padding: 0; }
 
 /* ===== Default ===== */
+
 	/* === Animation === */
 	#wchat-wrapper a, #wchat-wrapper a:hover,
 	.wchat-btn, .wchat-btn:hover
@@ -16,8 +17,10 @@
 		-moz-transition: all 0.3s;
 	}
 	
+	#wchat-wrapper a { color: #f90; background-color: transparent !important; }
+		#wchat-wrapper a:hover { color: #fff; background-color: transparent !important; }
+		
 	* { outline: none; }
-	
 
 	#wchat-wrapper::selection { color: #222; background: #ddd; }
 	#wchat-wrapper ::-moz-selection { color: #222; background: #ddd; }
@@ -285,8 +288,6 @@
 		overflow: hidden;
 	}
 		.wchat-msg b { color: #fff; font-weight: normal; }
-		.wchat-msg a { color: #f90; }
-			.wchat-msg a:hover { color: #fff; }
 
 	.wchat-nick { margin-right: 8px; cursor: pointer; }
 	.wchat-nick:after { content: ':'; }
@@ -408,6 +409,12 @@
 	#wchat-cfg-wrapper .wchat-menu-popup-content ul li select {
 		margin-left: 4px;
 	}
+	
+	#wchat-cfg-about {
+		cursor: default !important;
+		color: #888;
+		font-size: 10px;
+	}
 
 /* ====== User menu ====== */
 	#wchat-usermenu-wrapper {
@@ -415,7 +422,6 @@
 		top: 0; right: 0;
 		margin-right: 100%;
 		width: 100%; max-width: 300px;
-		height: 102px;
 		
 		background: #222328;
 		border-bottom: 3px solid #383D44;
@@ -444,6 +450,7 @@
 	.wchat-usermenu-banmenu { 
 		display: none; 
 		padding: 4px;
+		height: 80px;
 		font-size: 10px;
 	}
 	.wchat-usermenu-banmenu .wchat-btn {
@@ -469,7 +476,7 @@
 		display: inline-block;
 		position: absolute;
 		width: 12px; height: 8px;
-		bottom: 6px; right: 6px;
+		bottom: 6px; right: 5px;
 		border: 1px solid #333;
 	}
 		#chat-switch-screen-btn:hover { border: 1px solid #fff; }

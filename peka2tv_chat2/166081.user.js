@@ -54,6 +54,8 @@ $(document).ready(function() {
 				forYouWrapper: 			'#wchat-foryou-wrapper',
 				smilesWrapper: 			'#wchat-smiles-wrapper'
 			},
+			version: 'v2.0',
+			
 			userMenuUserSetup: {
 				name:	null,
 				userId:	null,
@@ -199,6 +201,11 @@ $(document).ready(function() {
 			html += 						'<option>10</option>';
 			html += 					'</select>';
 			html += 				'</li>';
+			
+			html += 				'<li id="wchat-cfg-about">';
+			html += 					'peka2tv chat <a href="http://userscripts.org/scripts/show/166081" target="_blank">'+ cfg.version +'</a><br>';
+			html += 					'Установить старую версию <a href="http://userscripts.org/scripts/show/186199" target="_blank">v1.x</a> ';
+			html += 				'</li>';
 			html += 			'</ul>';
 			html += 		'</div>';
 			html += 	'</div>';
@@ -210,11 +217,15 @@ $(document).ready(function() {
 				title = cfg.streamTitle,
 				streamer = cfg.streamerName;
 
-			if (cfg.streamerName === undefined)
-				text = textHTML = cfg.streamTitle;
+			if ((cfg.streamerName == '') && (cfg.streamTitle == ''))
+				text = textHTML = 'Unknown channel';
 			else {
-				text = cfg.streamerName +': '+ cfg.streamTitle;
-				textHTML = '<em>'+ cfg.streamerName +':</em> '+ cfg.streamTitle;
+				if (cfg.streamerName === undefined)
+					text = textHTML = cfg.streamTitle;
+				else {
+					text = cfg.streamerName +': '+ cfg.streamTitle;
+					textHTML = '<em>'+ cfg.streamerName +':</em> '+ cfg.streamTitle;
+				}
 			}
 
 			html += '<div id="wchat-chanells-title" title="'+ text +'">'+ textHTML +'</div>';
@@ -281,7 +292,6 @@ $(document).ready(function() {
 			html += 				'<li data-action="answer">Ответить</li>';
 			html += 				'<li data-action="banmenu">Забанить</li>';
 			html += 				'<li data-action="send-private-msg">Послать ЛС</li>';
-			html += 				'<li data-action="ignore-unignore">Ignore / Unignore</li>';
 			html += 			'</ul>';
 			html += 		'</div>';
 			html += 		'<div class="wchat-usermenu-banmenu">';
@@ -893,7 +903,6 @@ $(document).ready(function() {
 							var id = cfg.userMenuUserSetup.userId;
 							window.open('http://sc2tv.ru/messages/new/'+ id,'_blank'); 
 							break;
-						case 'ignore-unignore': break;
 					}
 				});
 				
