@@ -18,12 +18,9 @@
 	
 	* { outline: none; }
 	
-	#wchat-wrapper ::selection {
-		color: #222; background: #ddd;
-	}
-	#wchat-wrapper ::-moz-selection {
-		color: #222; background: #ddd;
-	}
+	#wchat-wrapper ::selection { color: #222; background: #ddd; }
+	#wchat-wrapper ::-moz-selection { color: #222; background: #ddd; }
+	#wchat-wrapper ::-webkit-selection { color: #222; background: #ddd; }
 
 	#wchat-wrapper textarea, select, option {
 		font-family: 'Open Sans', sans-serif;
