@@ -161,7 +161,7 @@ $(document).ready(function() {
 			}
 		
 			html +=		'<div id="wchat-smiles-wrapper" class="wchat-menu-popup">';
-			html += 		'<div class="wchat-menu-popup-close"><span>Смайлы</span><div>&#x274c</div></div>';
+			html += 		'<div class="wchat-menu-popup-close"><span>Смайлы</span><div>&#10005;</div></div>';
 			html += 		'<div class="wchat-menu-popup-content">'+ smilesHtml +'</div>';
 			html += 	'</div>';
 			
@@ -171,7 +171,7 @@ $(document).ready(function() {
 			var html = '';
 
 			html +=		'<div id="wchat-cfg-wrapper" class="wchat-menu-popup">';
-			html += 		'<div class="wchat-menu-popup-close"><span>Настройки</span><div>&#x274c</div></div>';
+			html += 		'<div class="wchat-menu-popup-close"><span>Настройки</span><div>&#10005;</div></div>';
 			html += 		'<div class="wchat-menu-popup-content">';
 			html += 			'<ul>';
 			html += 				'<li id="wchat-cfg-smiles">';
@@ -245,7 +245,7 @@ $(document).ready(function() {
 			var html = '';
 
 			html +=		'<div id="wchat-adm-wrapper" class="wchat-menu-popup">';
-			html += 		'<div class="wchat-menu-popup-close"><span>Сообщения от администрации</span><div>&#x274c</div></div>';
+			html += 		'<div class="wchat-menu-popup-close"><span>Сообщения от администрации</span><div>&#10005;</div></div>';
 			html += 		'<div class="wchat-menu-popup-content"></div>';
 			html += 	'</div>';
 			
@@ -255,7 +255,7 @@ $(document).ready(function() {
 			var html = '';
 
 			html +=		'<div id="wchat-links-wrapper" class="wchat-menu-popup">';
-			html += 		'<div class="wchat-menu-popup-close"><span>Ссылки из чата</span><div>&#x274c</div></div>';
+			html += 		'<div class="wchat-menu-popup-close"><span>Ссылки из чата</span><div>&#10005;</div></div>';
 			html += 		'<div class="wchat-menu-popup-content"></div>';
 			html += 	'</div>';
 			
@@ -265,7 +265,7 @@ $(document).ready(function() {
 			var html = '';
 
 			html +=		'<div id="wchat-foryou-wrapper" class="wchat-menu-popup">';
-			html += 		'<div class="wchat-menu-popup-close"><span>Сообщения адресованные вам</span><div>&#x274c</div></div>';
+			html += 		'<div class="wchat-menu-popup-close"><span>Сообщения адресованные вам</span><div>&#10005;</div></div>';
 			html += 		'<div class="wchat-menu-popup-content"></div>';
 			html += 	'</div>';
 			
@@ -275,7 +275,7 @@ $(document).ready(function() {
 			var html = '';
 
 			html +=		'<div id="wchat-usermenu-wrapper">';
-			html += 		'<div class="wchat-usermenu-close"><span class="wchat-usermenu-name"></span><div>&#x274c</div></div>';
+			html += 		'<div class="wchat-usermenu-close"><span class="wchat-usermenu-name"></span><div>&#10005;</div></div>';
 			html += 		'<div class="wchat-usermenu-content">';
 			html += 			'<ul>';
 			html += 				'<li data-action="answer">Ответить</li>';
@@ -791,7 +791,7 @@ $(document).ready(function() {
 						if (msg.substr(0, streamer.length) != streamer) {
 							$(cfg.el.chatInput).val( streamer + msg );
 						}
-						$(cfg.el.chatInput).focus();
+						$(cfg.el.chatInput).selectRange( streamer.length + msg.length );
 					}
 				});
 
