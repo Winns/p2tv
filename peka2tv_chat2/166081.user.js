@@ -6,7 +6,7 @@
 // @copyright   27.04.2013, Winns
 // @include     http://chat.sc2tv.ru/*
 // @include     http://sc2tv.ru/*
-// @version     2.0.11
+// @version     2.0.12
 // @updateURL   http://userscripts.org/scripts/source/166081.meta.js
 // @downloadURL https://userscripts.org/scripts/source/166081.user.js
 // @grant       GM_addStyle
@@ -22,9 +22,10 @@ GM_addStyle (GM_getResourceText ('peka2tv_chat_css'));
 
 var HOST = window.location.host, 
 	SUBDOMAIN = HOST.split('.')[0];
+	FILE = location.pathname.substring(1);
 
 $(document).ready(function() {
-	if (SUBDOMAIN === 'chat') {
+	if ( (SUBDOMAIN === 'chat') && (FILE === 'index.htm') ){
 
 	/* ====== Variables ====== */
 		var cfg = { 
@@ -203,8 +204,14 @@ $(document).ready(function() {
 			html += 				'</li>';
 			
 			html += 				'<li id="wchat-cfg-about">';
+			html += 					'<a href="http://chat.sc2tv.ru/history.htm" target="_blank">История сообщений</a>, ';
+			html += 					'<a href="http://sc2tv.ru/chat-rules" target="_blank">Правила</a>, ';
+			html += 					'<a href="http://chat.sc2tv.ru/automoderation_history.htm" target="_blank">Баны</a>';
+			html += 				'</li>';
+			
+			html += 				'<li id="wchat-cfg-about">';
 			html += 					'peka2tv chat <a href="http://userscripts.org/scripts/show/166081" target="_blank">'+ cfg.version +'</a><br>';
-			html += 					'Установить старую версию <a href="http://userscripts.org/scripts/show/186199" target="_blank">v1.x</a> ';
+			html += 					'Установить старую версию <a href="http://userscripts.org/scripts/show/186199" target="_blank">v1.x</a>';
 			html += 				'</li>';
 			html += 			'</ul>';
 			html += 		'</div>';
@@ -232,10 +239,10 @@ $(document).ready(function() {
 			html += '<div id="wchat-chanells-list">';
 			html += 	'<div class="wchat-select-menu">';
 			
-				for (var key in cfg.channelsList) {
-					id			= cfg.channelsList[ key ].channelId;
-					title		= cfg.channelsList[ key ].channelTitle;
-					streamer	= cfg.channelsList[ key ].streamerName;
+				for (var i=0; i < cfg.channelsList.length; i++) {
+					id			= cfg.channelsList[ i ].channelId;
+					title		= cfg.channelsList[ i ].channelTitle;
+					streamer	= cfg.channelsList[ i ].streamerName;
 
 					if (streamer === undefined)
 						text = textHTML = title;
@@ -391,29 +398,33 @@ $(document).ready(function() {
 		}
 
 		function readChat() {
-			$.getJSON( cfg.chatURL + 'memfs/channel-' + cfg.channelId + '.json', function( jsonData ){
-				if ( jsonData != undefined ) {
+			$.getJSON( cfg.chatURL + 'memfs/channel-' + cfg.channelId + '.json', function( messages ){
+				if ( messages != undefined ) {
+					messages = messages.messages;
 
-					// form messages object. { 'message id': { -data- } }
-					var messages = {};
-					for (var key in jsonData.messages) {
-						messages[ jsonData.messages[key].id ] = jsonData.messages[key];
-					}
-					
 					// get new messages
-					var newMessages = {};
+					var newMessages = [];
 					if (cfg.messages === null) {
 						newMessages = messages;
 						renderMessages( newMessages );
 					} else {
-						for (var key in messages) {
-							if (cfg.messages.hasOwnProperty(key)) {
-							} else {
-								newMessages[ key ] = messages[ key ];
+
+						var newId, oldId, isOldMsg;
+						for (var i=0; i < messages.length; i++) {
+							newId = messages[i].id;
+							isOldMsg = false;
+							
+							for (var j=0; j < cfg.messages.length; j++) {
+								oldId = cfg.messages[j].id;
+								if (newId == oldId) { isOldMsg = true; }
 							}
+							
+							if (!isOldMsg) { newMessages.push( messages[i] ); }
 						}
+
 						renderMessages( newMessages );
 					}
+					
 					cfg.messages = messages;
 					
 					// chat widgets
@@ -440,20 +451,15 @@ $(document).ready(function() {
 			if (scrollAnimation === undefined) { scrollAnimation = true; }
 				
 			// form msgs html
-			var keys = Object.keys( data ), k, 
-				length = keys.length;
-			keys.sort();
-			
-			for (var i=length-1; i >= 0; i--) {
-				k = keys[i];
-
-				html = templates.chatMSG( data[k] ) + html;
+			for (var i=0; i < data.length; i++) {
+				html = templates.chatMSG( data[i] ) + html;
 			}
 			// append new msgs
 			$(cfg.el.chat).append( html );
 			
 			// animate new msgs
 			newMsgs = $(cfg.el.chat).find('.wchat-msg').not( oldMsgs );
+
 			if ( newMsgs.length ) {
 				newMsgs.fadeTo( cfg.time.newMsg, 1 );
 				
@@ -663,15 +669,16 @@ $(document).ready(function() {
 		/* === Links === */
 		function widgetChatLinks( data ) {
 			var msg, hasLink, html = '', newMsgs;
-			
-			for ( var key in data ) {
-				msg = data[ key ].message;
+
+			for (var i=0; i < data.length; i++ ) {
+				msg = data[ i ].message;
 				hasLink = msg.match( /\[url\](.*?)\[\/url\]/g );
 				
 				if ( hasLink ) {
-					html = templates.chatMSG( data[ key ] ) + html;
+					html = templates.chatMSG( data[ i ] ) + html;
 				}
 			}
+			
 			$( cfg.el.linksWrapper ).find('.wchat-menu-popup-content').append( html );
 			
 			var messages = $( cfg.el.linksWrapper ).find('.wchat-msg');
@@ -687,9 +694,9 @@ $(document).ready(function() {
 		function widgetAdmMsgs( data ) {
 			var html = '';
 			
-			for ( var key in data ) {
-				if ( data[ key ].role != 'user' ) {
-					html = templates.chatMSG( data[ key ] ) + html;
+			for (var i=0; i < data.length; i++) {
+				if ( data[ i ].role != 'user' ) {
+					html = templates.chatMSG( data[ i ] ) + html;
 				}
 			}
 			$( cfg.el.admWrapper ).find('.wchat-menu-popup-content').append( html );
@@ -707,9 +714,9 @@ $(document).ready(function() {
 		function widgetMsgsForYou( data ) {
 			var html = '', msgForUserRegExp = new RegExp('\\[b\\]' + escapeData( cfg.userInfo.name ) + '\\[/b\\],','gi');
 
-			for ( var key in data ) {
-				if ( data[ key ].message.search( msgForUserRegExp ) != -1 ) {
-					html = templates.chatMSG( data[ key ] ) + html;
+			for (var i=0; i < data.length; i++ ) {
+				if ( data[ i ].message.search( msgForUserRegExp ) != -1 ) {
+					html = templates.chatMSG( data[ i ] ) + html;
 				}
 			};
 			
