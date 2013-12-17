@@ -37,10 +37,7 @@
 	#wchat-wrapper select { background: #bbb; }
 	
 	#wchat-wrapper ul { list-style-type: none; }
-	
-/* ======  Hide original chat ====== */
-	#dialog2 { display: none; }
-	
+
 /* ====== Tupography ====== */
 	.wchat-error { 
 		padding: 0 4px;
@@ -158,6 +155,8 @@
 		position: relative;
 		width: 100%; height: calc(100% - 64px);
 		overflow-y: auto;
+		
+		font-size: 12px;
 	}
 	
 /* ====== Chat menu wrapper ====== */
@@ -280,8 +279,7 @@
 		padding: 4px;
 		border-bottom: 1px solid #333;
 		
-		color: #ccc;
-		font-size: 12px;
+		color: #c8c8c8;
 		word-wrap: break-word;
 		
 		opacity: 0.05;
@@ -460,6 +458,16 @@
 	.wchat-usermenu-banmenu .wchat-usermenu-callback {
 		margin-top: 2px;
 		color: #fe0;
+	}
+	
+/* ======  Hide original chat ====== */
+	#dialog2 {
+		display: none; 
+		/*
+		position: absolute;
+		z-index: 99999;
+		left: 350px;
+		*/
 	}
 	
 /* ====== Full screen button ====== */

@@ -6,7 +6,7 @@
 // @copyright   27.04.2013, Winns
 // @include     http://chat.sc2tv.ru/*
 // @include     http://sc2tv.ru/*
-// @version     2.0.12
+// @version     2.0.13
 // @updateURL   http://userscripts.org/scripts/source/166081.meta.js
 // @downloadURL https://userscripts.org/scripts/source/166081.user.js
 // @grant       GM_addStyle
@@ -46,6 +46,7 @@ $(document).ready(function() {
 				menuWrapper: 			'#wchat-menu-wrapper',
 				pleaseLogIn:			'#wchat-menu-inner-wrapper .wchat-please-login',
 				cfgSmilesSize: 			'#wchat-cfg-smiles select',
+				cfgFontSize: 			'#wchat-cfg-fontsize select',
 				cfgMsgsLimit:			'#wchat-cfg-msgslimit select',
 				channelsWrapper:		'#wchat-chanells-wrapper',
 
@@ -80,6 +81,7 @@ $(document).ready(function() {
 			messages: null,
 			smiles: unsafeWindow.smiles,
 			smilesSize: GM_getValue('wchat_smilesSize') || 1,
+			fontSize: GM_getValue('wchat_fontSize') || 12,
 			
 			scrollTimer: null,
 			doScroll: true,
@@ -180,6 +182,8 @@ $(document).ready(function() {
 			html += 				'<li id="wchat-cfg-smiles">';
 			html += 					'Размер смайлов ';
 			html += 					'<select>';
+			html += 						'<option>2</option>';
+			html += 						'<option>1.5</option>';
 			html += 						'<option>1.25</option>';
 			html += 						'<option>1</option>';
 			html += 						'<option>0.9</option>';
@@ -190,6 +194,17 @@ $(document).ready(function() {
 			html += 						'<option title="Выключить смайлы">0</option>';
 			html += 					'</select>';
 			html += 				'</li>';
+			
+			html += 				'<li id="wchat-cfg-fontsize">';
+			html += 					'Размер шрифта ';
+			html += 					'<select>';
+			html += 						'<option>40</option><option>36</option><option>32</option><option>28</option>';
+			html += 						'<option>24</option><option>20</option><option>18</option><option>16</option>';
+			html += 						'<option>15</option><option>14</option><option>13</option><option>12</option>';
+			html += 						'<option>11</option><option>10</option><option>9</option><option>8</option>';
+			html += 					'</select>';
+			html += 				'</li>';
+			
 			html += 				'<li id="wchat-cfg-msgslimit">';
 			html += 					'Лимит сообщений в чате ';
 			html += 					'<select>';
@@ -397,7 +412,9 @@ $(document).ready(function() {
 			return data;
 		}
 
-		function readChat() {
+		function readChat( scrollAnimation ) {
+			if (scrollAnimation === undefined) { scrollAnimation = true; }
+			
 			$.getJSON( cfg.chatURL + 'memfs/channel-' + cfg.channelId + '.json', function( messages ){
 				if ( messages != undefined ) {
 					messages = messages.messages;
@@ -406,34 +423,38 @@ $(document).ready(function() {
 					var newMessages = [];
 					if (cfg.messages === null) {
 						newMessages = messages;
-						renderMessages( newMessages );
+						renderMessages( newMessages, scrollAnimation );
 					} else {
 
 						var newId, oldId, isOldMsg;
-						for (var i=0; i < messages.length; i++) {
+						for (var i=0, lenI = messages.length; i < lenI; i++) {
 							newId = messages[i].id;
 							isOldMsg = false;
 							
-							for (var j=0; j < cfg.messages.length; j++) {
+							for (var j=0, lenJ = cfg.messages.length; j < lenJ; j++) {
 								oldId = cfg.messages[j].id;
-								if (newId == oldId) { isOldMsg = true; }
+								if (newId == oldId) { 
+									isOldMsg = true; 
+									break;
+								}
 							}
 							
 							if (!isOldMsg) { newMessages.push( messages[i] ); }
 						}
 
-						renderMessages( newMessages );
+						renderMessages( newMessages, scrollAnimation );
 					}
 					
 					cfg.messages = messages;
 					
 					// chat widgets
-					widgetChatLinks( newMessages );
-					widgetAdmMsgs( newMessages );
-					widgetMsgsForYou( newMessages );
+					if (newMessages.length > 0) {
+						widgetChatLinks( newMessages );
+						widgetAdmMsgs( newMessages );
+						widgetMsgsForYou( newMessages );
+					}
 				}
 			});
-
 		}
 		
 		function checkMsgCount() {
@@ -444,6 +465,8 @@ $(document).ready(function() {
 		}
 		
 		function renderMessages( data, scrollAnimation ) {
+			if (data.length < 1) return;
+			
 			var html = '', 
 				oldMsgs = $(cfg.el.chat).find('.wchat-msg'),
 				newMsgs;
@@ -464,7 +487,7 @@ $(document).ready(function() {
 				newMsgs.fadeTo( cfg.time.newMsg, 1 );
 				
 				if (scrollAnimation) {
-					// scroll, dell msg over limit
+					// scroll, del msg over limit
 					// if mousedown and scroll = false
 					if ( (!$( cfg.el.chat+':active' ).length) && cfg.doScroll ) {
 						$(cfg.el.chat).animate({ 
@@ -484,7 +507,7 @@ $(document).ready(function() {
 		function clearChat() {
 			cfg.messages = null;
 			$(cfg.el.chat).html('');
-			readChat();
+			readChat( false );
 		}
 		
 		function getMessageStyle( data ) {
@@ -668,14 +691,17 @@ $(document).ready(function() {
 	/* ====== Chat widgets ====== */
 		/* === Links === */
 		function widgetChatLinks( data ) {
-			var msg, hasLink, html = '', newMsgs;
+			var msg, hasLink, html = '', newMsgs, duplicate;
 
 			for (var i=0; i < data.length; i++ ) {
 				msg = data[ i ].message;
 				hasLink = msg.match( /\[url\](.*?)\[\/url\]/g );
 				
 				if ( hasLink ) {
-					html = templates.chatMSG( data[ i ] ) + html;
+					// check for duplicate
+					duplicate = $( cfg.el.linksWrapper ).find('.wchat-nick[data-msgid="'+ data[ i ].id +'"]').length;
+					if ( !duplicate )
+						html = templates.chatMSG( data[ i ] ) + html;
 				}
 			}
 			
@@ -692,11 +718,14 @@ $(document).ready(function() {
 		
 		/* === Adm === */
 		function widgetAdmMsgs( data ) {
-			var html = '';
+			var html = '', duplicate;
 			
 			for (var i=0; i < data.length; i++) {
 				if ( data[ i ].role != 'user' ) {
-					html = templates.chatMSG( data[ i ] ) + html;
+					// check for duplicate
+					duplicate = $( cfg.el.admWrapper ).find('.wchat-nick[data-msgid="'+ data[ i ].id +'"]').length;
+					if ( !duplicate )
+						html = templates.chatMSG( data[ i ] ) + html;
 				}
 			}
 			$( cfg.el.admWrapper ).find('.wchat-menu-popup-content').append( html );
@@ -712,11 +741,15 @@ $(document).ready(function() {
 		
 		/* === 4You === */
 		function widgetMsgsForYou( data ) {
-			var html = '', msgForUserRegExp = new RegExp('\\[b\\]' + escapeData( cfg.userInfo.name ) + '\\[/b\\],','gi');
+			var html = '', duplicate,
+				msgForUserRegExp = new RegExp('\\[b\\]' + escapeData( cfg.userInfo.name ) + '\\[/b\\],','gi');
 
 			for (var i=0; i < data.length; i++ ) {
 				if ( data[ i ].message.search( msgForUserRegExp ) != -1 ) {
-					html = templates.chatMSG( data[ i ] ) + html;
+					// check for duplicate
+					duplicate = $( cfg.el.forYouWrapper ).find('.wchat-nick[data-msgid="'+ data[ i ].id +'"]').length;
+					if ( !duplicate )
+						html = templates.chatMSG( data[ i ] ) + html;
 				}
 			};
 			
@@ -734,6 +767,7 @@ $(document).ready(function() {
 		/* === Cfg === */
 		function updateCfgFrame() {
 			$( cfg.el.cfgSmilesSize ).val( cfg.smilesSize );
+			$( cfg.el.cfgFontSize ).val( cfg.fontSize );
 			$( cfg.el.cfgMsgsLimit ).val( cfg.chatMessagesLimit );
 		}
 		function setSmilesSize( size ) {
@@ -741,6 +775,12 @@ $(document).ready(function() {
 			cfg.smilesSize = size;
 			
 			renderMessages( cfg.messages, false );
+		}
+		function setFontSize( size ) {
+			GM_setValue('wchat_fontSize', size.toString() )
+			cfg.fontSize = size;
+			
+			$( cfg.el.chat ).css('font-size', cfg.fontSize +'px');
 		}
 		function setMsgsLimit( limit ) {
 			GM_setValue('wchat_chatMessagesLimit', limit.toString() )
@@ -926,9 +966,16 @@ $(document).ready(function() {
 				});
 
 			/* ====== Cfg ====== */
+				/* === Cfg init === */
+				setFontSize( cfg.fontSize );
+				
 				/* === Smiles size === */
 				$( cfg.el.cfgSmilesSize ).on('change', function() {
 					setSmilesSize( $(this).val() );
+				});
+				/* === Font size === */
+				$( cfg.el.cfgFontSize ).on('change', function() {
+					setFontSize( $(this).val() );
 				});
 				/* === Messages limit === */
 				$( cfg.el.cfgMsgsLimit ).on('change', function() {
@@ -937,10 +984,10 @@ $(document).ready(function() {
 
 			/* === Script === */
 				// shutdown original chat
-				clearInterval( unsafeWindow.chatTimerId );
+				unsafeWindow.StopChat();
 
 				// get chat data from server
-				setTimeout(function() { readChat(); }, 250);
+				setTimeout(function() { readChat( false ); }, 250);
 
 				// updata chat data on interval
 				if (cfg.chatInterval != null) {
