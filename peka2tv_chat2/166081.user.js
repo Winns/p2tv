@@ -259,7 +259,7 @@ $(document).ready(function() {
 			}
 
 			html += '<div id="wchat-chanells-title" title="'+ text +'">';
-			html += 	'<span>'+ textHTML +'</span><a href="http://chat.sc2tv.ru/index.htm?channelId='+ cfg.channelId +'" title="Full screen">&#9633;</a>';
+			html += 	'<span>'+ textHTML +'</span><a href="http://chat.sc2tv.ru/index.htm?channelId='+ cfg.channelId +'" title="Full screen chat">&rarr;</a>';
 			html += '</div>';
 			html += '<div id="wchat-chanells-list">';
 			html += 	'<div class="wchat-select-menu">';
