@@ -6,7 +6,9 @@
 // @copyright   27.04.2013, Winns
 // @include     http://chat.sc2tv.ru/*
 // @include     http://sc2tv.ru/*
-// @version     2.0.13
+// @match 		http://chat.sc2tv.ru/*
+// @match 		http://sc2tv.ru/*
+// @version     2.0.14
 // @updateURL   http://userscripts.org/scripts/source/166081.meta.js
 // @downloadURL https://userscripts.org/scripts/source/166081.user.js
 // @grant       GM_addStyle
@@ -44,7 +46,7 @@ $(document).ready(function() {
 				userMenuBanCallback:	'#wchat-usermenu-wrapper .wchat-usermenu-banmenu .wchat-usermenu-callback',
 				menuButtons: 			'#wchat-menu-inner-wrapper .wchat-btn',
 				menuWrapper: 			'#wchat-menu-wrapper',
-				pleaseLogIn:			'#wchat-menu-inner-wrapper .wchat-please-login',
+				userState:				'#wchat-menu-inner-wrapper .wchat-userstate',
 				cfgSmilesSize: 			'#wchat-cfg-smiles select',
 				cfgFontSize: 			'#wchat-cfg-fontsize select',
 				cfgMsgsLimit:			'#wchat-cfg-msgslimit select',
@@ -55,6 +57,12 @@ $(document).ready(function() {
 				linksWrapper: 			'#wchat-links-wrapper',
 				forYouWrapper: 			'#wchat-foryou-wrapper',
 				smilesWrapper: 			'#wchat-smiles-wrapper'
+			},
+			eventMessages: {
+				capsAbuse: 'Слишком много капса.',
+				autoBan: 'Что-то не так с вашим сообщением, возможно превышен лимит смайлов.',
+				pleaseLogIn: 'Please log in...',
+				banned: 'Вы забанены до '
 			},
 			version: 'v2.0',
 			
@@ -120,7 +128,7 @@ $(document).ready(function() {
 			html += 				'<div id="wchat-btn-streamer" class="wchat-btn" title="Написать стримеру">S</div>';
 			html += 				'<div id="wchat-btn-smiles" class="wchat-btn" title="Смайлы" data-target="smilesWrapper"></div>';
 			html += 			'</div>';
-			html += 			templates.pleaseLogIn();
+			html += 			templates.userState();
 			html += 			'<div id="wchat-menu-control">';
 			html += 				'<div class="wchat-btn" title="Настройки" data-target="cfgWrapper">CFG</div>';
 			html += 				'<div class="wchat-btn" title="Сообщения от администрации" data-target="admWrapper">ADM</div>';
@@ -250,7 +258,9 @@ $(document).ready(function() {
 				}
 			}
 
-			html += '<div id="wchat-chanells-title" title="'+ text +'">'+ textHTML +'</div>';
+			html += '<div id="wchat-chanells-title" title="'+ text +'">';
+			html += 	'<span>'+ textHTML +'</span><a href="http://chat.sc2tv.ru/index.htm?channelId='+ cfg.channelId +'" title="Full screen">&#9633;</a>';
+			html += '</div>';
 			html += '<div id="wchat-chanells-list">';
 			html += 	'<div class="wchat-select-menu">';
 			
@@ -341,10 +351,10 @@ $(document).ready(function() {
 			
 			return html;
 		}
-		templates.pleaseLogIn = function() {
+		templates.userState = function() {
 			var html = '';
 			if ( !isUserLoggedIn() ) {
-				html = '<div class="wchat-please-login">Please log in...</div>';
+				html = '<div class="wchat-userstate">'+ cfg.eventMessages.pleaseLogIn +'</div>';
 			}
 			return html;
 		}
@@ -382,21 +392,46 @@ $(document).ready(function() {
 			}
 		}
 		
+		function getBanInfo() {
+			var info = { isBanned: false, banExpire: '' };
+
+			if ((cfg.userInfo !== '') || (cfg.userInfo !== null) || (cfg.userInfo !== undefined)) {
+				if ((cfg.userInfo.type === 'bannedInChat') || (cfg.userInfo.type === 'bannedOnSite')) {
+					info.isBanned = true;
+					info.banExpire = new Date( cfg.userInfo.banExpirationTime * 1000 ).toLocaleString();
+				}
+			}
+			
+			return info;
+		}
+		
 		function msg2html( data ) {
 			// bb codes parser
 			var html = [
 				'<b>$1</b>',
-				'<a href="$1" target="_blank">$2</a>',
-				'<a href="$1" target="_blank">$1</a>'
+				'<a href="$1" target="_blank">$2</a>'
 			];
 			var bb = [
 				/\[b\](.*?)\[\/b\]/g,
-				/\[url=(.*?)\](.*?)\[\/url\]/g,
-				/\[url\](.*?)\[\/url\]/g
+				/\[url=(.*?)\](.*?)\[\/url\]/g
 			];
 			for (var i=0; i < bb.length; i++) {
 				data = data.replace( bb[i], html[i] );
 			}
+			
+			// url shortener
+			data = data.replace( /\[url\](.*?)\[\/url\]/g, function( match, url ) {
+				var text;
+				if (url.length > 40)
+					text = url.substr(0, 26) +'...'+ url.substr(url.length - 11);
+				else
+					text = url;
+					
+				text = text.replace(/(http[s]?:\/\/)?(www\.)?/i, '');
+				if (text.length < 1) text = 'link';
+					
+				return '<a href="'+ url +'" target="_blank">'+ text +'</a>';
+			});
 
 			// smiles
 			data = data.replace( /:s(:[-a-z0-9]{2,}:)/gi, function( match, code ) {
@@ -551,16 +586,26 @@ $(document).ready(function() {
 		
 		function sendMessage() {
 			var msg = $( cfg.el.chatInput ).val();
-			
+
 			// sanitize user msg
 			msg = msg.replace( /[^\u0020-\u007E\u0400-\u045F\u0490\u0491\u0207\u0239\u2012\u2013\u2014]+/g, '' );
 			msg = msg.replace( /[\s]+/g, ' ' );
+			
+			// check for caps abuse
+			if ( unsafeWindow.IsStringCapsOrAbuse( msg ) == true ) {
+				alert( cfg.eventMessages.capsAbuse ); return;
+			}
 			
 			// fix smiles
 			msg = fixSmileCode( msg );
 			// fix url
 			msg = unsafeWindow.AddUrlBBCode( msg );
 			
+			// check for auto ban
+			if ( unsafeWindow.CheckForAutoBan( msg ) == true ) {
+				alert( cfg.eventMessages.autoBan ); return;
+			}
+
 			$( cfg.el.chatInput ).attr( 'readonly', 'readonly' );
 			// post message
 			$.post( cfg.chatGate,
@@ -577,7 +622,6 @@ $(document).ready(function() {
 					$( cfg.el.chatInput ).removeAttr( 'readonly' );
 				}
 			);
-			
 		}
 		
 		function escapeData( data ) {
@@ -638,9 +682,14 @@ $(document).ready(function() {
 			});
 		}
 			function onUserInfoUpdate() {
-				if (isUserLoggedIn()) {
-					// hide 'please log in..' overlay
-					$( cfg.el.pleaseLogIn ).fadeOut( cfg.time.hide );
+				if ( isUserLoggedIn() ) {
+					// if user banned
+					if ( getBanInfo().isBanned ) {
+						$( cfg.el.userState ).html( cfg.eventMessages.banned + getBanInfo().banExpire );
+						return;
+					}
+					// hide user state overlay
+					$( cfg.el.userState ).fadeOut( cfg.time.hide );
 					// activate '4YOU' button
 					$('.wchat-btn.disabled[data-target="forYouWrapper"]').removeClass('disabled');
 					// append smiles window
@@ -818,7 +867,7 @@ $(document).ready(function() {
 					onChannelsInfoUpdate();
 				});
 				// open channel menu
-				$( document ).on('click', '#wchat-chanells-title', function() {
+				$( document ).on('click', '#wchat-chanells-title span', function() {
 					toggleChannels();
 				});
 

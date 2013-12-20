@@ -24,6 +24,16 @@
 
 	#wchat-wrapper::selection { color: #222; background: #ddd; }
 	#wchat-wrapper ::-moz-selection { color: #222; background: #ddd; }
+	
+	#wchat-wrapper::-webkit-scrollbar {
+		width: 4px;
+		background: #222;
+	}
+	#wchat-wrapper::-webkit-scrollbar-track { border-radius: 0; }
+	#wchat-wrapper::-webkit-scrollbar-thumb {
+		border-radius: 0;
+		background: #888;
+	}
 
 	#wchat-wrapper textarea, select, option {
 		font-family: 'Open Sans', sans-serif;
@@ -120,6 +130,12 @@
 			
 			z-index: 2;
 		}
+			#wchat-chanells-title a {
+				position: absolute;
+				top: -3px; right: 2px;
+				font-size: 16px;
+				color: #666;
+			}
 			
 		#wchat-chanells-list {
 			position: absolute;
@@ -205,7 +221,7 @@
 		}
 			#wchat-menu-inner-wrapper .input-wrapper textarea:focus { background: rgba(0, 0, 0, 0.75); }
 			
-	#wchat-menu-inner-wrapper .wchat-please-login {
+	#wchat-menu-inner-wrapper .wchat-userstate {
 		position: absolute;
 		top: 0; left: 0;
 		width: 100%; height: 33px;
