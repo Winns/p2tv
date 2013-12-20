@@ -24,16 +24,6 @@
 
 	#wchat-wrapper::selection { color: #222; background: #ddd; }
 	#wchat-wrapper ::-moz-selection { color: #222; background: #ddd; }
-	
-	#wchat-msgs-wrapper::-webkit-scrollbar {
-		width: 4px;
-		background: #222;
-	}
-	#wchat-msgs-wrapper::-webkit-scrollbar-track { border-radius: 0; }
-	#wchat-msgs-wrapper::-webkit-scrollbar-thumb {
-		border-radius: 0;
-		background: #888;
-	}
 
 	#wchat-wrapper textarea, select, option {
 		font-family: 'Open Sans', sans-serif;
