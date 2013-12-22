@@ -7,7 +7,8 @@
 
 	/* === Animation === */
 	#wchat-wrapper a, #wchat-wrapper a:hover,
-	.wchat-btn, .wchat-btn:hover
+	.wchat-btn, .wchat-btn:hover,
+	.wchat-msg-ignore .wchat-msg-text, .wchat-msg-ignore .wchat-msg-text:hover
 	{ 
 		text-decoration: none;
 		
@@ -17,7 +18,7 @@
 		-moz-transition: all 0.3s;
 	}
 	
-	#wchat-wrapper a { color: #f90; background-color: transparent !important; }
+	#wchat-wrapper a { color: #D68100; background-color: transparent !important; }
 		#wchat-wrapper a:hover { color: #fff; background-color: transparent !important; }
 		
 	* { outline: none; }
@@ -115,11 +116,16 @@
 			white-space: nowrap;
 			
 			overflow: hidden;
-			cursor: pointer;
 			background: #333839;
 			
 			z-index: 2;
 		}
+			#wchat-chanells-title span { 
+				position: absolute;
+				top: 0; left: 0;
+				width: 100%; height: 100%;
+				cursor: pointer; 
+			}
 			#wchat-chanells-title a {
 				position: absolute;
 				top: -1px; right: 2px;
@@ -324,6 +330,9 @@
 		font-size: 10px;
 	}
 	.wchat-msg-foruser { background: #453e37; }	
+	.wchat-msg-friend { background: #212129; }
+	.wchat-msg-ignore .wchat-msg-text { opacity: 0.01; background: transparent !important; }
+	.wchat-msg:hover.wchat-msg-ignore .wchat-msg-text { opacity: 0.3; }
 		
 /* ====== Chat popup window ====== */
 	.wchat-menu-popup {
@@ -414,6 +423,18 @@
 		margin-left: 4px;
 	}
 	
+	#wchat-cfg-wrapper .wchat-btn {
+		padding: 0 8px;
+		height: 14px;
+		line-height: 14px;
+		font-size: 9px;
+	}
+	#wchat-cfg-friendlist select, #wchat-cfg-ignorelist select {
+		margin: 0 !important;
+		width: 100%; max-width: 250px;
+	}
+	
+
 	#wchat-cfg-about {
 		cursor: default !important;
 		color: #888;

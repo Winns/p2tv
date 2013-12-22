@@ -8,7 +8,7 @@
 // @include     http://sc2tv.ru/*
 // @match 		http://chat.sc2tv.ru/*
 // @match 		http://sc2tv.ru/*
-// @version     2.0.14
+// @version     2.0.15
 // @updateURL   http://userscripts.org/scripts/source/166081.meta.js
 // @downloadURL https://userscripts.org/scripts/source/166081.user.js
 // @grant       GM_addStyle
@@ -36,6 +36,7 @@ $(document).ready(function() {
 				chatInput:				'#wchat-input',
 				chatPopUpClose:			'.wchat-menu-popup-close div',
 				chatPopUp:				'.wchat-menu-popup',
+				channelsWrapper:		'#wchat-chanells-wrapper',
 				streamerBtn: 			'#wchat-btn-streamer',
 				privateSmiles:			'.wchat-smile-private',
 				userName: 				'.wchat-nick',
@@ -47,10 +48,13 @@ $(document).ready(function() {
 				menuButtons: 			'#wchat-menu-inner-wrapper .wchat-btn',
 				menuWrapper: 			'#wchat-menu-wrapper',
 				userState:				'#wchat-menu-inner-wrapper .wchat-userstate',
+				cfgFriendList: 			'#wchat-cfg-friendlist select',
+				cfgFriendListBtn: 		'#wchat-cfg-friendlist .wchat-btn',
+				cfgIgnoreList: 			'#wchat-cfg-ignorelist select',
+				cfgIgnoreListBtn: 		'#wchat-cfg-ignorelist .wchat-btn',
 				cfgSmilesSize: 			'#wchat-cfg-smiles select',
 				cfgFontSize: 			'#wchat-cfg-fontsize select',
 				cfgMsgsLimit:			'#wchat-cfg-msgslimit select',
-				channelsWrapper:		'#wchat-chanells-wrapper',
 
 				cfgWrapper: 			'#wchat-cfg-wrapper',
 				admWrapper: 			'#wchat-adm-wrapper',
@@ -59,13 +63,12 @@ $(document).ready(function() {
 				smilesWrapper: 			'#wchat-smiles-wrapper'
 			},
 			eventMessages: {
-				capsAbuse: 'Слишком много капса.',
-				autoBan: 'Что-то не так с вашим сообщением, возможно превышен лимит смайлов.',
-				pleaseLogIn: 'Please log in...',
-				banned: 'Вы забанены до '
+				capsAbuse:		'Слишком много капса.',
+				autoBan:		'Что-то не так с вашим сообщением, возможно превышен лимит смайлов.',
+				pleaseLogIn:	'Please log in...',
+				banned:			'Вы забанены до '
 			},
-			version: 'v2.0',
-			
+
 			userMenuUserSetup: {
 				name:	null,
 				userId:	null,
@@ -88,6 +91,9 @@ $(document).ready(function() {
 			
 			messages: null,
 			smiles: unsafeWindow.smiles,
+			
+			friendList: JSON.parse( GM_getValue('wchat_friendList') || '{}' ),
+			ignoreList: JSON.parse( GM_getValue('wchat_ignoreList') || '{}' ),
 			smilesSize: GM_getValue('wchat_smilesSize') || 1,
 			fontSize: GM_getValue('wchat_fontSize') || 12,
 			
@@ -145,7 +151,7 @@ $(document).ready(function() {
 				msgData = 'data-userid="'+ data.uid +'" data-msgid="'+ data.id +'"';
 
 			html += '<div class="wchat-msg '+ style.msg +'" title="'+ data.date +'">';
-			html += '<span class="wchat-nick '+ style.nick +'" '+ msgData +' >'+ data.name +'</span>'+ msg2html(data.message);
+			html += 	'<span class="wchat-nick '+ style.nick +'" '+ msgData +' >'+ data.name +'</span><span class="wchat-msg-text">'+ msg2html(data.message) +'</span>';
 			html += '</div>';
 			
 			return html;
@@ -187,6 +193,15 @@ $(document).ready(function() {
 			html += 		'<div class="wchat-menu-popup-close"><span>Настройки</span><div>&#10005;</div></div>';
 			html += 		'<div class="wchat-menu-popup-content">';
 			html += 			'<ul>';
+			
+			html += 				'<li id="wchat-cfg-friendlist">';
+			html += 					'В друзьях <br><select></select><br><div class="wchat-btn">УДАЛИТЬ</div>';
+			html += 				'</li>';
+			
+			html += 				'<li id="wchat-cfg-ignorelist">';
+			html += 					'В игноре <br><select></select><br><div class="wchat-btn">УДАЛИТЬ</div>';
+			html += 				'</li>';
+			
 			html += 				'<li id="wchat-cfg-smiles">';
 			html += 					'Размер смайлов ';
 			html += 					'<select>';
@@ -233,7 +248,7 @@ $(document).ready(function() {
 			html += 				'</li>';
 			
 			html += 				'<li id="wchat-cfg-about">';
-			html += 					'peka2tv chat <a href="http://userscripts.org/scripts/show/166081" target="_blank">'+ cfg.version +'</a><br>';
+			html += 					'peka2tv chat <a href="http://userscripts.org/scripts/show/166081" target="_blank">v2.x</a><br>';
 			html += 					'Установить старую версию <a href="http://userscripts.org/scripts/show/186199" target="_blank">v1.x</a>';
 			html += 				'</li>';
 			html += 			'</ul>';
@@ -259,7 +274,7 @@ $(document).ready(function() {
 			}
 
 			html += '<div id="wchat-chanells-title" title="'+ text +'">';
-			html += 	'<span>'+ textHTML +'</span><a href="http://chat.sc2tv.ru/index.htm?channelId='+ cfg.channelId +'" title="Full screen chat">&rarr;</a>';
+			html += 	textHTML +'<span></span><a href="http://chat.sc2tv.ru/index.htm?channelId='+ cfg.channelId +'" title="Full screen chat" target="_blank">&rarr;</a>';
 			html += '</div>';
 			html += '<div id="wchat-chanells-list">';
 			html += 	'<div class="wchat-select-menu">';
@@ -322,8 +337,10 @@ $(document).ready(function() {
 			html += 		'<div class="wchat-usermenu-content">';
 			html += 			'<ul>';
 			html += 				'<li data-action="answer">Ответить</li>';
-			html += 				'<li data-action="banmenu">Забанить</li>';
+			html += 				'<li data-action="add-to-friends">Добавить в друзья</li>';
 			html += 				'<li data-action="send-private-msg">Послать ЛС</li>';
+			html += 				'<li data-action="banmenu">Забанить</li>';
+			html += 				'<li data-action="add-to-ignore">Добавить в игнор</li>';
 			html += 			'</ul>';
 			html += 		'</div>';
 			html += 		'<div class="wchat-usermenu-banmenu">';
@@ -447,8 +464,7 @@ $(document).ready(function() {
 			return data;
 		}
 
-		function readChat( scrollAnimation ) {
-			if (scrollAnimation === undefined) { scrollAnimation = true; }
+		function readChat( renderCfg ) {
 			
 			$.getJSON( cfg.chatURL + 'memfs/channel-' + cfg.channelId + '.json', function( messages ){
 				if ( messages != undefined ) {
@@ -458,7 +474,7 @@ $(document).ready(function() {
 					var newMessages = [];
 					if (cfg.messages === null) {
 						newMessages = messages;
-						renderMessages( newMessages, scrollAnimation );
+						renderMessages( newMessages, renderCfg );
 					} else {
 
 						var newId, oldId, isOldMsg;
@@ -477,11 +493,11 @@ $(document).ready(function() {
 							if (!isOldMsg) { newMessages.push( messages[i] ); }
 						}
 
-						renderMessages( newMessages, scrollAnimation );
+						renderMessages( newMessages, renderCfg );
 					}
-					
+
 					cfg.messages = messages;
-					
+
 					// chat widgets
 					if (newMessages.length > 0) {
 						widgetChatLinks( newMessages );
@@ -494,47 +510,63 @@ $(document).ready(function() {
 		
 		function checkMsgCount() {
 			var msgsEl = $(cfg.el.chat).find('div');
-			if (msgsEl.length > cfg.chatMessagesLimit) {
-				msgsEl.slice(0, msgsEl.length-cfg.chatMessagesLimit).remove();
-			}
+			if (msgsEl.length > cfg.chatMessagesLimit)
+				msgsEl.slice(0, msgsEl.length - cfg.chatMessagesLimit).remove();
 		}
 		
-		function renderMessages( data, scrollAnimation ) {
+		function renderMessages( data, renderCfg ) {
+
 			if (data.length < 1) return;
 			
 			var html = '', 
 				oldMsgs = $(cfg.el.chat).find('.wchat-msg'),
 				newMsgs;
-	
-			if (scrollAnimation === undefined) { scrollAnimation = true; }
-				
+			
+			if (renderCfg === undefined) {
+				renderCfg = {scroll: 'animation', fade: true, append: true }; 
+			} else {
+				if (!renderCfg.hasOwnProperty( 'scroll' )) { renderCfg.scroll = 'animation'; }
+				if (!renderCfg.hasOwnProperty( 'fade' ))  { renderCfg.fade = true; }
+				if (!renderCfg.hasOwnProperty( 'append' ))  { renderCfg.append = true; }
+			}
+
 			// form msgs html
 			for (var i=0; i < data.length; i++) {
 				html = templates.chatMSG( data[i] ) + html;
 			}
-			// append new msgs
-			$(cfg.el.chat).append( html );
+			
+			// push new msgs
+			if ( renderCfg.append )
+				$(cfg.el.chat).append( html );
+			else
+				$(cfg.el.chat).html( html );
 			
 			// animate new msgs
 			newMsgs = $(cfg.el.chat).find('.wchat-msg').not( oldMsgs );
 
 			if ( newMsgs.length ) {
-				newMsgs.fadeTo( cfg.time.newMsg, 1 );
-				
-				if (scrollAnimation) {
-					// scroll, del msg over limit
-					// if mousedown and scroll = false
-					if ( (!$( cfg.el.chat+':active' ).length) && cfg.doScroll ) {
-						$(cfg.el.chat).animate({ 
-								scrollTop: $(cfg.el.chat)[0].scrollHeight 
-							}, cfg.time.scroll, function(){
-								checkMsgCount();
-							}
-						);
-					}
-				} else {
-					$(cfg.el.chat).scrollTop( $(cfg.el.chat)[0].scrollHeight );
-					checkMsgCount();
+				if ( renderCfg.fade )
+					newMsgs.fadeTo( cfg.time.newMsg, 1 );
+				else
+					newMsgs.css( 'opacity', 1 );
+					
+				switch ( renderCfg.scroll ) {
+					case 'animation':
+						// scroll, del msg over limit
+						// if mousedown and scroll = false
+						if ( (!$( cfg.el.chat+':active' ).length) && cfg.doScroll ) {
+							$(cfg.el.chat).animate({ 
+									scrollTop: $(cfg.el.chat)[0].scrollHeight 
+								}, cfg.time.scroll, function(){
+									checkMsgCount();
+								}
+							);
+						}
+						break;
+					case 'instant':
+						$(cfg.el.chat).scrollTop( $(cfg.el.chat)[0].scrollHeight );
+						checkMsgCount();
+						break;
 				}
 			}
 		}
@@ -542,7 +574,7 @@ $(document).ready(function() {
 		function clearChat() {
 			cfg.messages = null;
 			$(cfg.el.chat).html('');
-			readChat( false );
+			readChat( {scroll: 'instant'} );
 		}
 		
 		function getMessageStyle( data ) {
@@ -558,15 +590,23 @@ $(document).ready(function() {
 			}
 			
 			// top supporter
-			if (data.roleIds.indexOf( 24 ) !== -1) {
+			if (data.roleIds.indexOf( 24 ) !== -1)
 				style.nick += ' wchat-user-topsupporter';
-			}
-			
-			// message for you
+
 			if (isUserLoggedIn()) {
+				// message for you
 				var msgForUserRegExp = new RegExp('\\[b\\]' + escapeData( cfg.userInfo.name ) + '\\[/b\\],','gi');
 				if ( data.message.search( msgForUserRegExp ) != -1 ) {
 					style.msg += ' wchat-msg-foruser';
+				} else {
+				
+					// if @ friend list
+					if ( cfg.friendList.hasOwnProperty(data.uid) )
+						style.msg += ' wchat-msg-friend';
+						
+					// if @ ignore list
+					if ( cfg.ignoreList.hasOwnProperty(data.uid) )
+						style.msg += ' wchat-msg-ignore';
 				}
 			}
 			
@@ -667,6 +707,52 @@ $(document).ready(function() {
 				}
 			);
 		}
+		
+		function addToFriends( id, name ) {
+			cfg.friendList[ id ] = name;
+			GM_setValue('wchat_friendList', JSON.stringify( cfg.friendList ) );
+			
+			if (isIgnored( id ))
+				removeIgnore( id );
+
+			$( cfg.el.userName +'[data-userid="'+ id +'"]' ).parent().addClass('wchat-msg-friend');
+		}
+		function removeFriend( id ) {
+			delete cfg.friendList[ id ];
+			GM_setValue('wchat_friendList', JSON.stringify( cfg.friendList ) );
+			$( cfg.el.userName +'[data-userid="'+ id +'"]' ).parent().removeClass('wchat-msg-friend');
+		}
+		function isFriend( id ) {
+			if ( cfg.friendList.hasOwnProperty( id ) )
+				return true;
+			else
+				return false;
+		}
+		
+		function addToIgnore( id, name ) {
+			cfg.ignoreList[ id ] = name;
+			GM_setValue('wchat_ignoreList', JSON.stringify( cfg.ignoreList ) );
+			
+			if (isFriend( id ))
+				removeFriend( id );
+			
+			$( cfg.el.userName +'[data-userid="'+ id +'"]' ).parent().addClass('wchat-msg-ignore');
+		}
+		function removeIgnore( id ) {
+			delete cfg.ignoreList[ id ];
+			GM_setValue('wchat_ignoreList', JSON.stringify( cfg.ignoreList ) );
+			$( cfg.el.userName +'[data-userid="'+ id +'"]' ).parent().removeClass('wchat-msg-ignore');
+		}
+		function isIgnored( id ) {
+			if ( cfg.ignoreList.hasOwnProperty( id ) )
+				return true;
+			else
+				return false;
+		}
+		
+		
+		
+		
 		
 		function getUserInfo() {
 			$.ajax({
@@ -815,6 +901,20 @@ $(document).ready(function() {
 		
 		/* === Cfg === */
 		function updateCfgFrame() {
+			var html = '';
+			// friend list
+			for (var key in cfg.friendList) {
+				html += '<option data-id="'+ key +'">'+ cfg.friendList[ key ] +'</option>';
+			}
+			$( cfg.el.cfgFriendList ).html( html );
+			
+			// ignore list
+			html = '';
+			for (var key in cfg.ignoreList) {
+				html += '<option data-id="'+ key +'">'+ cfg.ignoreList[ key ] +'</option>';
+			}
+			$( cfg.el.cfgIgnoreList ).html( html );
+			
 			$( cfg.el.cfgSmilesSize ).val( cfg.smilesSize );
 			$( cfg.el.cfgFontSize ).val( cfg.fontSize );
 			$( cfg.el.cfgMsgsLimit ).val( cfg.chatMessagesLimit );
@@ -822,8 +922,7 @@ $(document).ready(function() {
 		function setSmilesSize( size ) {
 			GM_setValue('wchat_smilesSize', size.toString() )
 			cfg.smilesSize = size;
-			
-			renderMessages( cfg.messages, false );
+			renderMessages( cfg.messages, {scroll: 'off', fade: false, append: false} );
 		}
 		function setFontSize( size ) {
 			GM_setValue('wchat_fontSize', size.toString() )
@@ -835,7 +934,7 @@ $(document).ready(function() {
 			GM_setValue('wchat_chatMessagesLimit', limit.toString() )
 			cfg.chatMessagesLimit = limit;
 			
-			renderMessages( cfg.messages, false );
+			renderMessages( cfg.messages, {scroll: 'instant', fade: false, append: false} );
 		}
 
 		
@@ -960,7 +1059,8 @@ $(document).ready(function() {
 							chatHeight			= $(cfg.el.chat).outerHeight(),
 							msgPosition			= $(this).position(),
 							chatMenuPosition	= $(cfg.el.menuWrapper).position(),
-							top					= -(chatHeight - msgPosition.top);
+							top					= -(chatHeight - msgPosition.top),
+							text 				= '';
 
 						if (-top < userMenuHeight) {
 							top =  -userMenu.outerHeight();
@@ -978,7 +1078,23 @@ $(document).ready(function() {
 							userId: $(this).attr('data-userid'),
 							msgId: $(this).attr('data-msgid')
 						}
-
+						
+						// handle add/remove friend text
+						if (isFriend( cfg.userMenuUserSetup.userId )) {
+							text = 'Удалить из друзей';
+						} else {
+							text = 'Добавить в друзья';
+						}
+						$( cfg.el.userMenu ).find('.wchat-usermenu-content ul li[data-action="add-to-friends"]').text( text );
+						
+						// handle add/remove ignore text
+						if (isIgnored( cfg.userMenuUserSetup.userId )) {
+							text = 'Удалить из игнора';
+						} else {
+							text = 'Добавить в игнор';
+						}
+						$( cfg.el.userMenu ).find('.wchat-usermenu-content ul li[data-action="add-to-ignore"]').text( text );
+						
 						userMenuShow();
 					}
 				});
@@ -991,7 +1107,7 @@ $(document).ready(function() {
 					var action = $(this).attr('data-action');
 					switch( action ) {
 						case 'answer':
-							var nick = '[b]'+ $(cfg.el.userMenuName).text() +'[/b], ';
+							var nick = '[b]'+ $( cfg.el.userMenuName ).text() +'[/b], ';
 							$( cfg.el.chatInput ).val( nick );
 							$( cfg.el.chatInput ).selectRange( nick.length );
 							userMenuHide();
@@ -1005,6 +1121,27 @@ $(document).ready(function() {
 							var id = cfg.userMenuUserSetup.userId;
 							window.open('http://sc2tv.ru/messages/new/'+ id,'_blank'); 
 							break;
+						case 'add-to-friends':
+							var id = cfg.userMenuUserSetup.userId,
+								nick = $( cfg.el.userMenuName ).text();
+							if (isFriend( cfg.userMenuUserSetup.userId )) {
+								removeFriend( id );
+							} else {
+								addToFriends( id, nick );
+							}
+							userMenuHide();
+							break;
+						case 'add-to-ignore':
+							var id = cfg.userMenuUserSetup.userId,
+								nick = $( cfg.el.userMenuName ).text();
+							if (isIgnored( cfg.userMenuUserSetup.userId )) {
+								removeIgnore( id );
+							} else {
+								addToIgnore( id, nick );
+							}
+							userMenuHide();
+							break;	
+						
 					}
 				});
 				
@@ -1017,6 +1154,18 @@ $(document).ready(function() {
 			/* ====== Cfg ====== */
 				/* === Cfg init === */
 				setFontSize( cfg.fontSize );
+				
+				/* === Friend list === */
+				$( cfg.el.cfgFriendListBtn ).on('click', function() {
+					removeFriend( $( cfg.el.cfgFriendList ).find(':selected').attr('data-id') );
+					updateCfgFrame();
+				});
+				
+				/* === Ignore list === */
+				$( cfg.el.cfgIgnoreListBtn ).on('click', function() {
+					removeIgnore( $( cfg.el.cfgIgnoreList ).find(':selected').attr('data-id') );
+					updateCfgFrame();
+				});
 				
 				/* === Smiles size === */
 				$( cfg.el.cfgSmilesSize ).on('change', function() {
@@ -1036,7 +1185,7 @@ $(document).ready(function() {
 				unsafeWindow.StopChat();
 
 				// get chat data from server
-				setTimeout(function() { readChat( false ); }, 250);
+				setTimeout(function() { readChat( {scroll: 'instant'} ); }, 250);
 
 				// updata chat data on interval
 				if (cfg.chatInterval != null) {
