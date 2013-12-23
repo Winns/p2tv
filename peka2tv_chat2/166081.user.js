@@ -8,7 +8,7 @@
 // @include     http://sc2tv.ru/*
 // @match 		http://chat.sc2tv.ru/*
 // @match 		http://sc2tv.ru/*
-// @version     2.0.15
+// @version     2.0.16
 // @updateURL   http://userscripts.org/scripts/source/166081.meta.js
 // @downloadURL https://userscripts.org/scripts/source/166081.user.js
 // @grant       GM_addStyle
@@ -34,7 +34,7 @@ $(document).ready(function() {
 			el: {
 				chat:					'#wchat-msgs-wrapper',
 				chatInput:				'#wchat-input',
-				chatPopUpClose:			'.wchat-menu-popup-close div',
+				chatPopUpClose:			'.wchat-menu-popup-close',
 				chatPopUp:				'.wchat-menu-popup',
 				channelsWrapper:		'#wchat-chanells-wrapper',
 				streamerBtn: 			'#wchat-btn-streamer',
@@ -96,8 +96,7 @@ $(document).ready(function() {
 			ignoreList: JSON.parse( GM_getValue('wchat_ignoreList') || '{}' ),
 			smilesSize: GM_getValue('wchat_smilesSize') || 1,
 			fontSize: GM_getValue('wchat_fontSize') || 12,
-			
-			scrollTimer: null,
+
 			doScroll: true,
 			time: {
 				scroll: 1100,
@@ -594,20 +593,20 @@ $(document).ready(function() {
 				style.nick += ' wchat-user-topsupporter';
 
 			if (isUserLoggedIn()) {
+				// if @ ignore list
+				if ( cfg.ignoreList.hasOwnProperty(data.uid) )
+					style.msg += ' wchat-msg-ignore';
+
 				// message for you
 				var msgForUserRegExp = new RegExp('\\[b\\]' + escapeData( cfg.userInfo.name ) + '\\[/b\\],','gi');
 				if ( data.message.search( msgForUserRegExp ) != -1 ) {
 					style.msg += ' wchat-msg-foruser';
 				} else {
-				
 					// if @ friend list
 					if ( cfg.friendList.hasOwnProperty(data.uid) )
 						style.msg += ' wchat-msg-friend';
-						
-					// if @ ignore list
-					if ( cfg.ignoreList.hasOwnProperty(data.uid) )
-						style.msg += ' wchat-msg-ignore';
 				}
+
 			}
 			
 			switch( data.uid ) {
@@ -741,7 +740,7 @@ $(document).ready(function() {
 		function removeIgnore( id ) {
 			delete cfg.ignoreList[ id ];
 			GM_setValue('wchat_ignoreList', JSON.stringify( cfg.ignoreList ) );
-			$( cfg.el.userName +'[data-userid="'+ id +'"]' ).parent().removeClass('wchat-msg-ignore');
+			$( cfg.el.userName +'[data-userid="'+ id +'"]' ).parent().removeClass('wchat-msg-ignore');	
 		}
 		function isIgnored( id ) {
 			if ( cfg.ignoreList.hasOwnProperty( id ) )
@@ -988,8 +987,8 @@ $(document).ready(function() {
 			/* === Chat popup === */
 				// close
 				$ ( document ).on('click', cfg.el.chatPopUpClose, function() {
-					$(this).parent().parent().toggleClass('active');
-					$(this).parent().parent().animate({top: 0 }, cfg.time.hide );
+					$(this).parent().toggleClass('active');
+					$(this).parent().animate({top: 0 }, cfg.time.hide );
 				});
 
 			/* === Streamer === */

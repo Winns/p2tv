@@ -329,7 +329,10 @@
 		color: #f9514d;
 		font-size: 10px;
 	}
-	.wchat-msg-foruser { background: #453e37; }	
+	
+	.wchat-msg-foruser { background: #453e37 !important; }
+		.wchat-msg-ignore.wchat-msg-foruser { background: transparent !important; }
+		
 	.wchat-msg-friend { background: #212129; }
 	.wchat-msg-ignore .wchat-msg-text { opacity: 0.01; background: transparent !important; }
 	.wchat-msg:hover.wchat-msg-ignore .wchat-msg-text { opacity: 0.3; }
@@ -416,7 +419,6 @@
 		
 		padding: 2px 8px;
 		border-bottom: 1px solid #111;
-		cursor: pointer;
 	}
 		#wchat-cfg-wrapper .wchat-menu-popup-content ul li:last-child { border: none; }	
 	#wchat-cfg-wrapper .wchat-menu-popup-content ul li select {
