@@ -42,7 +42,7 @@ $(document).ready(function() {
 				userName: 				'.wchat-nick',
 				userMenu: 				'#wchat-usermenu-wrapper',
 				userMenuName: 			'.wchat-usermenu-name',
-				userMenuClose: 			'#wchat-usermenu-wrapper .wchat-usermenu-close div',
+				userMenuClose: 			'#wchat-usermenu-wrapper .wchat-usermenu-close',
 				userMenuBan: 			'#wchat-usermenu-wrapper .wchat-usermenu-banmenu .wchat-btn',
 				userMenuBanCallback:	'#wchat-usermenu-wrapper .wchat-usermenu-banmenu .wchat-usermenu-callback',
 				menuButtons: 			'#wchat-menu-inner-wrapper .wchat-btn',
