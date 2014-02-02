@@ -8,7 +8,7 @@
 // @include     http://sc2tv.ru/*
 // @match 		http://chat.sc2tv.ru/*
 // @match 		http://sc2tv.ru/*
-// @version     2.0.16
+// @version     2.0.17
 // @updateURL   http://userscripts.org/scripts/source/166081.meta.js
 // @downloadURL https://userscripts.org/scripts/source/166081.user.js
 // @grant       GM_addStyle
@@ -55,6 +55,8 @@ $(document).ready(function() {
 				cfgSmilesSize: 			'#wchat-cfg-smiles select',
 				cfgFontSize: 			'#wchat-cfg-fontsize select',
 				cfgMsgsLimit:			'#wchat-cfg-msgslimit select',
+				cfgFriendsMsgStyle:		'#wchat-cfg-friendsmsgstyle select',
+				cfgForUserMsgStyle:		'#wchat-cfg-forusermsgstyle select',
 
 				cfgWrapper: 			'#wchat-cfg-wrapper',
 				admWrapper: 			'#wchat-adm-wrapper',
@@ -96,10 +98,12 @@ $(document).ready(function() {
 			ignoreList: JSON.parse( GM_getValue('wchat_ignoreList') || '{}' ),
 			smilesSize: GM_getValue('wchat_smilesSize') || 1,
 			fontSize: GM_getValue('wchat_fontSize') || 12,
+			friendsMsgStyle: GM_getValue('wchat_friendsMsgStyle') || 'wchat-msg-friend-style-default',
+			forUserMsgStyle: GM_getValue('wchat_forUserMsgStyle') || 'wchat-msg-foruser-style-default',
 
 			doScroll: true,
 			time: {
-				scroll: 1100,
+				scroll: 900,
 				newMsg: 900,
 				hide: 300,
 				show: 300,
@@ -237,6 +241,27 @@ $(document).ready(function() {
 			html += 						'<option>50</option>';
 			html += 						'<option>20</option>';
 			html += 						'<option>10</option>';
+			html += 					'</select>';
+			html += 				'</li>';
+			
+			html += 				'<li id="wchat-cfg-friendsmsgstyle">';
+			html += 					'Friends msg style ';
+			html += 					'<select>';
+			html += 						'<option data-class="wchat-msg-friend-style-default">default</option>';
+			html += 						'<option data-class="wchat-msg-friend-style-grgray">gray gradient</option>';
+			html += 						'<option data-class="wchat-msg-friend-style-grgray3d">gray gradient + 3d</option>';
+			html += 					'</select>';
+			html += 				'</li>';
+			
+			html += 				'<li id="wchat-cfg-forusermsgstyle">';
+			html += 					'4YOU msg style ';
+			html += 					'<select>';
+			html += 						'<option data-class="wchat-msg-foruser-style-default">default</option>';
+			html += 						'<option data-class="wchat-msg-foruser-style-classic">classic</option>';
+			html += 						'<option data-class="wchat-msg-foruser-style-grbrown">brown gradient</option>';
+			html += 						'<option data-class="wchat-msg-foruser-style-grbrown3d">brown gradient + 3d</option>';
+			html += 						'<option data-class="wchat-msg-foruser-style-grgreen">green gradient</option>';
+			html += 						'<option data-class="wchat-msg-foruser-style-grgreen3d">green gradient + 3d</option>';
 			html += 					'</select>';
 			html += 				'</li>';
 			
@@ -548,14 +573,14 @@ $(document).ready(function() {
 					newMsgs.fadeTo( cfg.time.newMsg, 1 );
 				else
 					newMsgs.css( 'opacity', 1 );
-					
+
 				switch ( renderCfg.scroll ) {
 					case 'animation':
 						// scroll, del msg over limit
 						// if mousedown and scroll = false
 						if ( (!$( cfg.el.chat+':active' ).length) && cfg.doScroll ) {
 							$(cfg.el.chat).animate({ 
-									scrollTop: $(cfg.el.chat)[0].scrollHeight 
+									scrollTop: $(cfg.el.chat)[0].scrollHeight - ($(cfg.el.chat).height()+0.001)
 								}, cfg.time.scroll, function(){
 									checkMsgCount();
 								}
@@ -563,7 +588,7 @@ $(document).ready(function() {
 						}
 						break;
 					case 'instant':
-						$(cfg.el.chat).scrollTop( $(cfg.el.chat)[0].scrollHeight );
+						$(cfg.el.chat).scrollTop( $(cfg.el.chat)[0].scrollHeight - ($(cfg.el.chat).height()+0.001) );
 						checkMsgCount();
 						break;
 				}
@@ -600,11 +625,11 @@ $(document).ready(function() {
 				// message for you
 				var msgForUserRegExp = new RegExp('\\[b\\]' + escapeData( cfg.userInfo.name ) + '\\[/b\\],','gi');
 				if ( data.message.search( msgForUserRegExp ) != -1 ) {
-					style.msg += ' wchat-msg-foruser';
+					style.msg += ' wchat-msg-foruser '+ cfg.forUserMsgStyle;
 				} else {
 					// if @ friend list
 					if ( cfg.friendList.hasOwnProperty(data.uid) )
-						style.msg += ' wchat-msg-friend';
+						style.msg += ' wchat-msg-friend '+ cfg.friendsMsgStyle;
 				}
 
 			}
@@ -714,12 +739,18 @@ $(document).ready(function() {
 			if (isIgnored( id ))
 				removeIgnore( id );
 
-			$( cfg.el.userName +'[data-userid="'+ id +'"]' ).parent().addClass('wchat-msg-friend');
+			$( cfg.el.userName +'[data-userid="'+ id +'"]' ).parent()
+				.addClass('wchat-msg-friend '+ cfg.friendsMsgStyle);
 		}
 		function removeFriend( id ) {
 			delete cfg.friendList[ id ];
 			GM_setValue('wchat_friendList', JSON.stringify( cfg.friendList ) );
-			$( cfg.el.userName +'[data-userid="'+ id +'"]' ).parent().removeClass('wchat-msg-friend');
+			
+			$( cfg.el.userName +'[data-userid="'+ id +'"]' ).parent()
+				.removeClass('wchat-msg-friend')
+				.removeClass(function (index, elClass) {
+					return (elClass.match (/\wchat-msg-friend-style\S+/g) || []).join(' ');
+				});
 		}
 		function isFriend( id ) {
 			if ( cfg.friendList.hasOwnProperty( id ) )
@@ -917,23 +948,47 @@ $(document).ready(function() {
 			$( cfg.el.cfgSmilesSize ).val( cfg.smilesSize );
 			$( cfg.el.cfgFontSize ).val( cfg.fontSize );
 			$( cfg.el.cfgMsgsLimit ).val( cfg.chatMessagesLimit );
+			$( cfg.el.cfgFriendsMsgStyle ).find('option[data-class="'+ cfg.friendsMsgStyle +'"]').attr('selected', 'selected');
+			$( cfg.el.cfgForUserMsgStyle).find('option[data-class="'+ cfg.forUserMsgStyle +'"]').attr('selected', 'selected');
 		}
 		function setSmilesSize( size ) {
-			GM_setValue('wchat_smilesSize', size.toString() )
+			GM_setValue( 'wchat_smilesSize', size.toString() );
 			cfg.smilesSize = size;
 			renderMessages( cfg.messages, {scroll: 'off', fade: false, append: false} );
 		}
 		function setFontSize( size ) {
-			GM_setValue('wchat_fontSize', size.toString() )
+			GM_setValue( 'wchat_fontSize', size.toString() );
 			cfg.fontSize = size;
 			
 			$( cfg.el.chat ).css('font-size', cfg.fontSize +'px');
 		}
 		function setMsgsLimit( limit ) {
-			GM_setValue('wchat_chatMessagesLimit', limit.toString() )
+			GM_setValue( 'wchat_chatMessagesLimit', limit.toString() );
 			cfg.chatMessagesLimit = limit;
 			
 			renderMessages( cfg.messages, {scroll: 'instant', fade: false, append: false} );
+		}
+		function setFriendsMsgStyle( style ) {
+			GM_setValue( 'wchat_friendsMsgStyle', style );
+			
+			cfg.friendsMsgStyle = style;
+			
+			$('.wchat-msg-friend')
+				.removeClass(function (index, elClass) {
+					return (elClass.match (/\wchat-msg-friend-style\S+/g) || []).join(' ');
+				})
+				.addClass( cfg.friendsMsgStyle );
+		}
+		function setForUserMsgStyle( style ) {
+			GM_setValue( 'wchat_forUserMsgStyle', style );
+			
+			cfg.forUserMsgStyle = style;
+			
+			$('.wchat-msg-foruser')
+				.removeClass(function (index, elClass) {
+					return (elClass.match (/\wchat-msg-foruser-style\S+/g) || []).join(' ');
+				})
+				.addClass( cfg.forUserMsgStyle );
 		}
 
 		
@@ -953,6 +1008,15 @@ $(document).ready(function() {
 					cfg.sctollTimer = setTimeout(function() {
 						cfg.doScroll = true;
 					}, cfg.time.scrollTimer);
+				});
+				
+				// fix scroll animation on window resize
+				$(window).on('resize', function() {
+					var el = $(cfg.el.chat);
+					
+					if (el.scrollTop() >= el[0].scrollHeight - el.height()) {
+						el.scrollTop( el[0].scrollHeight - (el.height()+1) );
+					}
 				});
 				
 			/* === Channels === */
@@ -976,6 +1040,15 @@ $(document).ready(function() {
 						e.preventDefault();
 						sendMessage();
 						return false; 
+					}
+				});
+				
+				// fix pageUp, pageDown @ textarea bug (chrome)
+				$( cfg.el.chatInput ).on('keydown', function(e){
+					if ((e.which == 33) || (e.which == 34)) {
+						e.stopPropagation();
+						e.preventDefault();
+						return false;
 					}
 				});
 
@@ -1177,6 +1250,14 @@ $(document).ready(function() {
 				/* === Messages limit === */
 				$( cfg.el.cfgMsgsLimit ).on('change', function() {
 					setMsgsLimit( $(this).val() );
+				});
+				/* === Friends msgs style === */
+				$( cfg.el.cfgFriendsMsgStyle ).on('change', function() {
+					setFriendsMsgStyle( $(this).find(':selected').attr('data-class') );
+				});
+				/* === 4YOU msgs style === */
+				$( cfg.el.cfgForUserMsgStyle ).on('change', function() {
+					setForUserMsgStyle( $(this).find(':selected').attr('data-class') );
 				});
 
 			/* === Script === */

@@ -330,12 +330,115 @@
 		font-size: 10px;
 	}
 	
-	.wchat-msg-foruser { background: #453e37 !important; }
-		.wchat-msg-ignore.wchat-msg-foruser { background: transparent !important; }
+	.wchat-msg-ignore.wchat-msg-foruser { background: transparent !important; }
 		
-	.wchat-msg-friend { background: #212129; }
 	.wchat-msg-ignore .wchat-msg-text { opacity: 0.01; background: transparent !important; }
 	.wchat-msg:hover.wchat-msg-ignore .wchat-msg-text { opacity: 0.3; }
+	
+	
+/* ====== friends msg styles ====== */
+	/* === default === OK */
+	.wchat-msg-friend-style-default { 
+		background: #212129;
+	}
+		
+	/* === gray gradient === OK */
+	.wchat-msg-friend-style-grgray { 
+		background: -moz-linear-gradient(left,  #111 0%, #333 100%); /* FF3.6+ */
+		background: -webkit-linear-gradient(left,  #111 0%,#333 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(left,  #111 0%,#333 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(left,  #111 0%,#333 100%); /* IE10+ */
+		background: linear-gradient(to right,  #111 0%,#333 100%); /* W3C */
+	}
+			
+	/* === gray gradient + 3d === OK */
+	.wchat-msg-friend-style-grgray3d { 
+		background: -moz-linear-gradient(left,  #111 0%, #333 100%); /* FF3.6+ */
+		background: -webkit-linear-gradient(left,  #111 0%,#333 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(left,  #111 0%,#333 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(left,  #111 0%,#333 100%); /* IE10+ */
+		background: linear-gradient(to right,  #111 0%,#333 100%); /* W3C */
+		
+		-webkit-box-shadow: 0px 10px 5px 0px rgba(0,0,0,0.75);
+		-moz-box-shadow: 0px 10px 5px 0px rgba(0,0,0,0.75);
+		box-shadow: 0px 10px 5px 0px rgba(0,0,0,0.75);
+	}
+	
+	
+	
+/* ====== 4you msg styles ====== */
+
+	/* === default === OK */
+	.wchat-msg-foruser-style-default { background: #453e37; }
+	
+	/* === classic === OK */
+	.wchat-msg-foruser-style-classic {}
+		.wchat-msg-foruser-style-classic .wchat-msg-text,
+		.wchat-msg-foruser-style-classic .wchat-msg-text b,
+		.wchat-msg-foruser-style-classic .wchat-msg-text a { 
+			color: #f36223; 
+		}
+		.wchat-msg-foruser-style-classic .wchat-msg-text b { font-weight: bold; }
+			
+	/* === brown gradient === OK */
+	.wchat-msg-foruser-style-grbrown { 
+		background: -moz-linear-gradient(left, #111 0%, #453e37 100%); /* FF3.6+ */
+		background: -webkit-linear-gradient(left, #111 0%, #453e37 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(left, #111 0%, #453e37 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(left, #111 0%, #453e37 100%); /* IE10+ */
+		background: linear-gradient(to right, #111 0%, #453e37 100%); /* W3C */
+	}
+		.wchat-msg-foruser-style-grbrown .wchat-msg-text { color: #d0d0d0; }
+			.wchat-msg-foruser-style-grbrown .wchat-msg-text a {
+				text-shadow: 1px 0 0 rgba(0, 0, 0, 0.7);
+			}
+			
+	/* === brown gradient 3d === OK */
+	.wchat-msg-foruser-style-grbrown3d { 
+		background: -moz-linear-gradient(left, #111 0%, #453e37 100%); /* FF3.6+ */
+		background: -webkit-linear-gradient(left, #111 0%, #453e37 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(left, #111 0%, #453e37 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(left, #111 0%, #453e37 100%); /* IE10+ */
+		background: linear-gradient(to right, #111 0%, #453e37 100%); /* W3C */
+		
+		-webkit-box-shadow: 0px 10px 5px 0px rgba(0,0,0,0.75);
+		-moz-box-shadow: 0px 10px 5px 0px rgba(0,0,0,0.75);
+		box-shadow: 0px 10px 5px 0px rgba(0,0,0,0.75);
+	}
+		.wchat-msg-foruser-style-grbrown3d .wchat-msg-text { color: #d0d0d0; }
+			.wchat-msg-foruser-style-grbrown3d .wchat-msg-text a {
+				text-shadow: 1px 0 0 rgba(0, 0, 0, 0.7);
+			}
+		
+	/* === green gradient === OK */
+	.wchat-msg-foruser-style-grgreen {
+		background: -moz-linear-gradient(left,  #111 15%, #6F9F3F 100%); /* FF3.6+ */
+		background: -webkit-linear-gradient(left,  #111 15%,#6F9F3F 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(left,  #111 15%,#6F9F3F 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(left,  #111 15%,#6F9F3F 100%); /* IE10+ */
+		background: linear-gradient(to right,  #111 15%,#6F9F3F 100%); /* W3C */
+	}
+		.wchat-msg-foruser-style-grgreen .wchat-msg-text { color: #d0d0d0; }
+			.wchat-msg-foruser-style-grgreen .wchat-msg-text a {
+				text-shadow: 2px 0 0 rgba(0, 0, 0, 0.75);
+			}
+			
+	/* === green gradient 3d === OK */
+	.wchat-msg-foruser-style-grgreen3d {
+		background: -moz-linear-gradient(left,  #111 15%, #6F9F3F 100%); /* FF3.6+ */
+		background: -webkit-linear-gradient(left,  #111 15%,#6F9F3F 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(left,  #111 15%,#6F9F3F 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(left,  #111 15%,#6F9F3F 100%); /* IE10+ */
+		background: linear-gradient(to right,  #111 15%,#6F9F3F 100%); /* W3C */
+		
+		-webkit-box-shadow: 0px 10px 5px 0px rgba(0,0,0,0.75);
+		-moz-box-shadow: 0px 10px 5px 0px rgba(0,0,0,0.75);
+		box-shadow: 0px 10px 5px 0px rgba(0,0,0,0.75);
+	}
+		.wchat-msg-foruser-style-grgreen3d .wchat-msg-text { color: #d0d0d0; }
+			.wchat-msg-foruser-style-grgreen3d .wchat-msg-text a {
+				text-shadow: 2px 0 0 rgba(0, 0, 0, 0.75);
+			}
 		
 /* ====== Chat popup window ====== */
 	.wchat-menu-popup {
