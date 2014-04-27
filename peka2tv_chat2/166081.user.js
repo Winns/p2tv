@@ -8,7 +8,7 @@
 // @include     http://sc2tv.ru/*
 // @match 		http://chat.sc2tv.ru/*
 // @match 		http://sc2tv.ru/*
-// @version     2.0.17
+// @version     2.0.18
 // @updateURL   http://userscripts.org/scripts/source/166081.meta.js
 // @downloadURL https://userscripts.org/scripts/source/166081.user.js
 // @grant       GM_addStyle
@@ -154,7 +154,7 @@ $(document).ready(function() {
 				msgData = 'data-userid="'+ data.uid +'" data-msgid="'+ data.id +'"';
 
 			html += '<div class="wchat-msg '+ style.msg +'" title="'+ data.date +'">';
-			html += 	'<span class="wchat-nick '+ style.nick +'" '+ msgData +' >'+ data.name +'</span><span class="wchat-msg-text">'+ msg2html(data.message) +'</span>';
+			html += 	'<span class="wchat-nick '+ style.nick +'" '+ msgData +' >'+ data.name +'</span> <span class="wchat-msg-text">'+ msg2html(data.message) +'</span>';
 			html += '</div>';
 			
 			return html;
@@ -1279,7 +1279,7 @@ $(document).ready(function() {
 		getUserInfo();
 		getChannelsInfo();
 		init();
-	
+
 	} // END (if SUBDOMAIN = chat)
 });
 
