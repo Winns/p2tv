@@ -603,6 +603,8 @@
 	}
 	
 /* ====== Full screen button ====== */
+	#tab_chat { position: relative; }
+	
 	#bchat, #quicktabs_tabpage_1_1 .content {
 		display: inline-block;
 		position: relative;
@@ -616,7 +618,7 @@
 		display: inline-block;
 		position: absolute;
 		width: 10px; height: 5px;
-		bottom: 4px; right: 6px;
+		bottom: 4px; right: 12px;
 		border: 1px solid #333;
 	}
 		#chat-switch-screen-btn:hover { border: 1px solid #fff; }
