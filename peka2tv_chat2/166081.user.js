@@ -8,7 +8,7 @@
 // @include     http://sc2tv.ru/*
 // @match 		http://chat.sc2tv.ru/*
 // @match 		http://sc2tv.ru/*
-// @version     2.0.18
+// @version     2.0.19
 // @updateURL   http://userscripts.org/scripts/source/166081.meta.js
 // @downloadURL https://userscripts.org/scripts/source/166081.user.js
 // @grant       GM_addStyle
@@ -603,14 +603,20 @@ $(document).ready(function() {
 		
 		function getMessageStyle( data ) {
 			var style = { msg: '', nick: '' };
+			
 			switch (data.role) {
-				case 'user':		style.nick = 'wchat-user-default'; break;
-				case 'admin':		style.nick = 'wchat-user-admin'; break;
-				case 'moderator':	style.nick = 'wchat-user-moderator'; break;
-				case 'editor':		style.nick = 'wchat-user-editor'; break;
-				case 'root':		style.nick = 'wchat-user-root'; break;
-				case 'streamer':	style.nick = 'wchat-user-streamer'; break;
-				default: 			style.nick = 'wchat-user-default'; break;
+				case 'user': 				style.nick = 'wchat-user-default'; break;	
+				case 'userstream-editor': 	style.nick = 'wchat-user-userstream-editor'; break;
+				case 'moderator':			style.nick = 'wchat-user-moderator'; break;
+				case 'editor': 				style.nick = 'wchat-user-editor'; break;
+				case 'root': 				style.nick = 'wchat-user-root'; break;
+				case 'streamer': 			style.nick = 'wchat-user-streamer'; break;
+				case 'prime-streamer':		style.nick = 'wchat-user-primestreamer'; break;
+				
+				case 'admin':
+				case 'color-red': 			style.nick = 'wchat-user-admin'; break;
+
+				default: 					style.nick = 'wchat-user-default'; break;
 			}
 			
 			// top supporter
@@ -1018,7 +1024,7 @@ $(document).ready(function() {
 						el.scrollTop( el[0].scrollHeight - (el.height()+1) );
 					}
 				});
-				
+
 			/* === Channels === */
 				// set new channel
 				$( document ).on('click', cfg.el.channelsWrapper +' .wchat-select-menu div', function() {			
@@ -1280,7 +1286,13 @@ $(document).ready(function() {
 		getChannelsInfo();
 		init();
 
-	} // END (if SUBDOMAIN = chat)
+	} else { // END (if SUBDOMAIN = chat)
+	
+		// add wrapper to iframe, to fix fullscreen button
+		$( '#tab_chat iframe' ).wrap( '<div id="wchat-iframe-fix" style="display: inline-block; position: relative;"></div>' );
+		$( '#chat-switch-screen-btn' ).appendTo( '#wchat-iframe-fix' );
+	
+	}
 });
 
 })();

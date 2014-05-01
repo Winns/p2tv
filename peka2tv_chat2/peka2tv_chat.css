@@ -165,7 +165,7 @@
 /* ====== Chat messages wrapper ====== */
 	#wchat-msgs-wrapper {
 		position: relative;
-		width: 100%; height: calc(100% - 64px);
+		width: 100%; height: calc(100% - 74px);
 		overflow-y: auto;
 		
 		font-size: 12px;
@@ -178,7 +178,7 @@
 		box-model: border-box;
 
 		position: relative;
-		width: 100%; height: 50px;
+		width: 100%; height: 60px;
 		border-top: 1px solid #555;
 	}
 	#wchat-menu-inner-wrapper {
@@ -199,7 +199,7 @@
 /* ====== Chat menu input ====== */
 	#wchat-menu-inner-wrapper .input-wrapper {
 		position: relative;
-		width: calc(100% - 20px); height: 31px;
+		width: calc(100% - 20px); height: 41px;
 	}
 		#wchat-menu-inner-wrapper .input-wrapper textarea {
 			display: block;
@@ -220,7 +220,7 @@
 	#wchat-menu-inner-wrapper .wchat-userstate {
 		position: absolute;
 		top: 0; left: 0;
-		width: 100%; height: 33px;
+		width: 100%; height: 43px;
 		line-height: 33px;
 		text-align: center;
 		font-size: 11px;
@@ -302,12 +302,15 @@
 	.wchat-nick { margin-right: 8px; cursor: pointer; }
 	.wchat-nick:after { content: ':'; }
 
-	.wchat-user-default		{ color: #7797be; }
-	.wchat-user-streamer	{ color: #5DA130; }
-	.wchat-user-moderator	{ color: #c57c08; }
-	.wchat-user-editor		{ color: #dad871; }
-	.wchat-user-admin		{ color: #bc3c3e; }
-	.wchat-user-root		{ color: #bc3c3e; }
+	.wchat-user-default				{ color: #7797be; }
+	.wchat-user-streamer			{ color: #5DA130; }
+	.wchat-user-primestreamer		{ color: #5DA130; }
+	.wchat-user-moderator			{ color: #c57c08; }
+	.wchat-user-editor				{ color: #dad871; }
+	.wchat-user-userstream-editor	{ color: #6ac6a2; }
+	.wchat-user-admin				{ color: #bc3c3e; }
+	.wchat-user-root				{ color: #bc3c3e; }
+	
 	
 	.wchat-user-topsupporter, .wchat-user-primetime, .wchat-user-system { 
 		padding-left: 16px; 
@@ -617,8 +620,8 @@
 		
 		display: inline-block;
 		position: absolute;
-		width: 10px; height: 5px;
-		bottom: 4px; right: 12px;
+		width: 14px; height: 8px;
+		bottom: 4px; right: 4px;
 		border: 1px solid #333;
 	}
 		#chat-switch-screen-btn:hover { border: 1px solid #fff; }
