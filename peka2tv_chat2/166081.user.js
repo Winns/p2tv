@@ -8,7 +8,7 @@
 // @include     http://sc2tv.ru/*
 // @match 		http://chat.sc2tv.ru/*
 // @match 		http://sc2tv.ru/*
-// @version     2.0.19
+// @version     2.0.20
 // @updateURL   http://userscripts.org/scripts/source/166081.meta.js
 // @downloadURL https://userscripts.org/scripts/source/166081.user.js
 // @grant       GM_addStyle
@@ -164,20 +164,24 @@ $(document).ready(function() {
 			return '<img src="img/'+ data.img +'" title="'+ data.code +'" style="'+ style +'" />';
 		}
 		templates.smilesWrapper = function() {
-			var html = smilesHtml = '', privateSmile,
-				userLoggedIn = isUserLoggedIn();
-			
+			var html = '', smilesHtml = '', 
+				privateSmile, userLoggedIn = isUserLoggedIn(),
+				userRoles = cfg.userInfo.roleIds.slice();
+
+			userRoles.push( 2 ); // 2 - default user role
+
 			for (var i=0; i < cfg.smiles.length; i++) {
 				privateSmile = '';
 				
 				// check if user have access to smile
-				//if ( userLoggedIn ){
-				//	for (var j=0; j < cfg.userInfo.roleIds.length; j++){
-				//		if (cfg.smiles[ i ].roles.indexOf( cfg.userInfo.roleIds[ j ] ) == -1) {
-				//			privateSmile = ' class="wchat-smile-private" title="Платные смайлы"';
-				//		}
-				//	}
-				//}
+				if (( userLoggedIn ) && ( cfg.smiles[ i ].private )) {
+					for (var j=0; j < userRoles.length; j++) {
+
+						if (cfg.smiles[ i ].roles.indexOf( userRoles[ j ] ) == -1) {
+							privateSmile = ' class="wchat-smile-private" title="Платные смайлы"';
+						}
+					}
+				}
 				
 				smilesHtml += '<div'+ privateSmile +'><img src="/img/'+ cfg.smiles[ i ].img +'" title="'+ cfg.smiles[ i ].code +'" /></div>';
 			}
