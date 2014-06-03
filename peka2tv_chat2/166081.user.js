@@ -15,7 +15,6 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM_getResourceText
-// @require     http://code.jquery.com/jquery-2.0.2.min.js
 // @resource    peka2tv_chat_css https://raw.github.com/Winns/p2tv/master/peka2tv_chat2/peka2tv_chat.css
 // @run-at		document-end
 // ==/UserScript==
@@ -26,7 +25,8 @@ GM_addStyle (GM_getResourceText ('peka2tv_chat_css'));
 function GM_wait() { 
 	if ((typeof unsafeWindow.StopChat == 'undefined') ||
 		(typeof unsafeWindow.smiles == 'undefined') ||
-		(typeof unsafeWindow.AddUrlBBCode == 'undefined'))
+		(typeof unsafeWindow.AddUrlBBCode == 'undefined') ||
+		(typeof unsafeWindow.$ == 'undefined'))
 		setTimeout( GM_wait, 100 ); 
 	else
 		GM_start();
@@ -34,6 +34,7 @@ function GM_wait() {
 GM_wait();
 
 function GM_start() {
+	var $ = unsafeWindow.$;
 
 	var HOST = window.location.host, 
 		SUBDOMAIN = HOST.split('.')[0];
@@ -1324,7 +1325,6 @@ function GM_start() {
 		$( '#chat-switch-screen-btn' ).appendTo( '#wchat-iframe-fix' );
 	
 	}
-	
 }
 
 })();
