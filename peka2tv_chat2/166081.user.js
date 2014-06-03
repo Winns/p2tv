@@ -8,7 +8,7 @@
 // @include     http://sc2tv.ru/*
 // @match 		http://chat.sc2tv.ru/*
 // @match 		http://sc2tv.ru/*
-// @version     2.0.21
+// @version     2.0.22
 // @updateURL   http://userscripts.org/scripts/source/166081.meta.js
 // @downloadURL https://userscripts.org/scripts/source/166081.user.js
 // @grant       GM_addStyle
@@ -17,6 +17,7 @@
 // @grant       GM_getResourceText
 // @require     http://code.jquery.com/jquery-2.0.2.min.js
 // @resource    peka2tv_chat_css https://raw.github.com/Winns/p2tv/master/peka2tv_chat2/peka2tv_chat.css
+// @run-at		document-end
 // ==/UserScript==
 (function () {
 
@@ -26,8 +27,21 @@ var HOST = window.location.host,
 	SUBDOMAIN = HOST.split('.')[0];
 	FILE = location.pathname.substring(1);
 
-$(document).ready(function() {
-	if ( (SUBDOMAIN === 'chat') && (FILE === 'index.htm') ){
+	
+
+function GM_wait() { 
+	if ((typeof unsafeWindow.StopChat == 'undefined') &&
+		(typeof unsafeWindow.smiles == 'undefined'))
+		setTimeout( GM_wait, 100 ); 
+	else
+		GM_start();
+}
+GM_wait();
+
+
+function GM_start() {
+
+	if ((SUBDOMAIN === 'chat') && (FILE === 'index.htm')) {
 
 	/* ====== Variables ====== */
 		var cfg = { 
@@ -93,7 +107,7 @@ $(document).ready(function() {
 			
 			messages: null,
 			smiles: unsafeWindow.smiles,
-			
+
 			friendList: JSON.parse( GM_getValue('wchat_friendList') || '{}' ),
 			ignoreList: JSON.parse( GM_getValue('wchat_ignoreList') || '{}' ),
 			smilesSize: GM_getValue('wchat_smilesSize') || 1,
@@ -859,7 +873,7 @@ $(document).ready(function() {
 					
 			el.toggleClass('active');
 			if ( !el.hasClass('active') ) {
-				el.stop(true, false).animate({top: '-83px' }, cfg.time.toggleChannels );
+				el.stop(true, false).animate({top: '-183px' }, cfg.time.toggleChannels );
 			} else {
 				el.stop(true, false).animate({top: '12px' }, cfg.time.toggleChannels );
 			}
@@ -1277,6 +1291,17 @@ $(document).ready(function() {
 			/* === Script === */
 				// shutdown original chat
 				unsafeWindow.StopChat();
+				/*
+				setTimeout(function() {
+				
+					exec(function() {
+						StopChat( true, "" );
+					});
+					
+				}, 5000);
+				*/
+				
+				//location.href = "javascript:void(StopChat(true,''));";
 
 				// get chat data from server
 				setTimeout(function() { readChat( {scroll: 'instant'} ); }, 250);
@@ -1301,6 +1326,7 @@ $(document).ready(function() {
 		$( '#chat-switch-screen-btn' ).appendTo( '#wchat-iframe-fix' );
 	
 	}
-});
+	
+}
 
 })();

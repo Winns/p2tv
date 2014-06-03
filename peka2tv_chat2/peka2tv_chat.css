@@ -135,14 +135,14 @@
 			
 		#wchat-chanells-list {
 			position: absolute;
-			top: -83px; left: 0;
+			top: -183px; left: 0;
 			width: 100%;
 			border-bottom: 3px solid #383D44;
 			
 			z-index: 1;
 		}
 			#wchat-chanells-list .wchat-select-menu { 
-				height: 80px;
+				height: 180px;
 				color: #793;
 				background: #222328;
 			}
@@ -626,9 +626,4 @@
 	}
 		#chat-switch-screen-btn:hover { border: 1px solid #fff; }
 		#chat-switch-screen-btn img { display: none; }
-	
-	
-	
-	
-	
 	
