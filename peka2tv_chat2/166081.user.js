@@ -8,7 +8,7 @@
 // @include     http://sc2tv.ru/*
 // @match 		http://chat.sc2tv.ru/*
 // @match 		http://sc2tv.ru/*
-// @version     2.0.22
+// @version     2.0.23
 // @updateURL   http://userscripts.org/scripts/source/166081.meta.js
 // @downloadURL https://userscripts.org/scripts/source/166081.user.js
 // @grant       GM_addStyle
@@ -23,23 +23,21 @@
 
 GM_addStyle (GM_getResourceText ('peka2tv_chat_css'));
 
-var HOST = window.location.host, 
-	SUBDOMAIN = HOST.split('.')[0];
-	FILE = location.pathname.substring(1);
-
-	
-
 function GM_wait() { 
-	if ((typeof unsafeWindow.StopChat == 'undefined') &&
-		(typeof unsafeWindow.smiles == 'undefined'))
+	if ((typeof unsafeWindow.StopChat == 'undefined') ||
+		(typeof unsafeWindow.smiles == 'undefined') ||
+		(typeof unsafeWindow.AddUrlBBCode == 'undefined'))
 		setTimeout( GM_wait, 100 ); 
 	else
 		GM_start();
 }
 GM_wait();
 
-
 function GM_start() {
+
+	var HOST = window.location.host, 
+		SUBDOMAIN = HOST.split('.')[0];
+		FILE = location.pathname.substring(1);
 
 	if ((SUBDOMAIN === 'chat') && (FILE === 'index.htm')) {
 
