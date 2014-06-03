@@ -595,6 +595,22 @@
 		color: #fe0;
 	}
 	
+/* ====== New Fullscreen button ====== */
+	#wchat-fullscreen {
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-model: border-box;
+		
+		display: inline-block;
+		position: absolute;
+		bottom: 4px; right: 4px;
+		width: 14px; height: 8px;
+
+		border: 1px solid #333;
+		cursor: pointer;
+	}
+		#wchat-fullscreen:hover { border: 1px solid #fff; }
+	
 /* ======  Hide original chat ====== */
 	#dialog2 {
 		display: none; 
@@ -612,6 +628,7 @@
 		display: inline-block;
 		position: relative;
 	}
+	
 	/* === Default button === */
 	#chat-switch-screen-btn {
 		-webkit-box-sizing: border-box;
@@ -620,9 +637,11 @@
 		
 		display: inline-block;
 		position: absolute;
-		width: 14px; height: 8px;
 		bottom: 4px; right: 4px;
+		width: 14px; height: 8px;
+
 		border: 1px solid #333;
+		cursor: pointer;
 	}
 		#chat-switch-screen-btn:hover { border: 1px solid #fff; }
 		#chat-switch-screen-btn img { display: none; }
