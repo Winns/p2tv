@@ -8,9 +8,7 @@
 // @include     http://sc2tv.ru/*
 // @match 		http://chat.sc2tv.ru/*
 // @match 		http://sc2tv.ru/*
-// @version     2.0.23
-// @updateURL   http://userscripts.org/scripts/source/166081.meta.js
-// @downloadURL https://userscripts.org/scripts/source/166081.user.js
+// @version     2.0.24
 // @grant       GM_addStyle
 // @grant       GM_getValue
 // @grant       GM_setValue
