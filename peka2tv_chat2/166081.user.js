@@ -8,7 +8,7 @@
 // @include     http://sc2tv.ru/*
 // @match 		http://chat.sc2tv.ru/*
 // @match 		http://sc2tv.ru/*
-// @version     2.0.28
+// @version     2.0.29
 // @updateURL	https://raw.githubusercontent.com/Winns/p2tv/master/peka2tv_chat2/166081.meta.js
 // @downloadURL	https://raw.githubusercontent.com/Winns/p2tv/master/peka2tv_chat2/166081.user.js
 // @grant       GM_addStyle
@@ -673,7 +673,12 @@ function GM_run() {
 						case '-1': 
 							style.msg += ' wchat-msg-system'; 
 							style.nick += ' wchat-user-system'; 
-							break;	// system message
+							break;	// system message	
+							
+						case '51245': 
+							style.nick += ' wchat-user-pes'; 
+							break;	// pes
+							
 					};
 					
 					return style;

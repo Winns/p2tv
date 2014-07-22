@@ -314,7 +314,10 @@
 	.wchat-user-pink				{ color: #ffc0cb; }
 	.wchat-user-red					{ color: #bc3c3e; }
 	
-	.wchat-user-topsupporter, .wchat-user-primetime, .wchat-user-system { 
+	.wchat-user-topsupporter, 
+	.wchat-user-primetime, 
+	.wchat-user-system,
+	.wchat-user-pes {
 		padding-left: 16px; 
 		background-size: 11px 11px;
 	}
@@ -326,6 +329,10 @@
 		}
 		.wchat-user-system {
 			background: url('img/grumpy.png') left center no-repeat;
+			background-size: 13px 13px;
+		}
+		.wchat-user-pes {
+			background: url('img/wow.png') left center no-repeat;
 			background-size: 13px 13px;
 		}
 		
