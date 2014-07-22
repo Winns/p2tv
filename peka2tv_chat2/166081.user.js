@@ -8,7 +8,7 @@
 // @include     http://sc2tv.ru/*
 // @match 		http://chat.sc2tv.ru/*
 // @match 		http://sc2tv.ru/*
-// @version     2.0.27
+// @version     2.0.28
 // @updateURL	https://raw.githubusercontent.com/Winns/p2tv/master/peka2tv_chat2/166081.meta.js
 // @downloadURL	https://raw.githubusercontent.com/Winns/p2tv/master/peka2tv_chat2/166081.user.js
 // @grant       GM_addStyle
@@ -637,6 +637,9 @@ function GM_run() {
 						
 						case 'admin':
 						case 'color-red': 			style.nick = 'wchat-user-admin'; break;
+						
+						case 'color-purple':		style.nick = 'wchat-user-purple'; break;
+						case 'color-pink':			style.nick = 'wchat-user-pink'; break;
 
 						default: 					style.nick = 'wchat-user-default'; break;
 					}

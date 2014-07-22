@@ -303,14 +303,16 @@
 	.wchat-nick:after { content: ':'; }
 
 	.wchat-user-default				{ color: #7797be; }
-	.wchat-user-streamer			{ color: #5DA130; }
-	.wchat-user-primestreamer		{ color: #5DA130; }
+	.wchat-user-streamer			{ color: #5da130; }
+	.wchat-user-primestreamer		{ color: #5da130; }
 	.wchat-user-moderator			{ color: #c57c08; }
 	.wchat-user-editor				{ color: #dad871; }
 	.wchat-user-userstream-editor	{ color: #6ac6a2; }
 	.wchat-user-admin				{ color: #bc3c3e; }
 	.wchat-user-root				{ color: #bc3c3e; }
-	
+	.wchat-user-purple				{ color: #9315c5; }
+	.wchat-user-pink				{ color: #ffc0cb; }
+	.wchat-user-red					{ color: #bc3c3e; }
 	
 	.wchat-user-topsupporter, .wchat-user-primetime, .wchat-user-system { 
 		padding-left: 16px; 
