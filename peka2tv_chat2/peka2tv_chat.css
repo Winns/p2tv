@@ -11,11 +11,10 @@
 	.wchat-msg-ignore .wchat-msg-text, .wchat-msg-ignore .wchat-msg-text:hover
 	{ 
 		text-decoration: none;
-		
-		transition: all 0.3s;
+
 		-o-transition: all 0.3s;
 		-webkit-transition: all 0.3s;
-		-moz-transition: all 0.3s;
+		transition: all 0.3s;
 	}
 	
 	#wchat-wrapper a { color: #D68100; background-color: transparent !important; }
@@ -314,32 +313,10 @@
 	.wchat-user-pink				{ color: #ffc0cb; }
 	.wchat-user-red					{ color: #bc3c3e; }
 	
-	.wchat-user-topsupporter, 
-	.wchat-user-primetime, 
-	.wchat-user-system,
-	.wchat-user-pes {
-		padding-left: 16px; 
-		background-size: 11px 11px;
-	}
-		.wchat-user-topsupporter {
-			background: url('img/donate_01.png') left center no-repeat;
-		}
-		.wchat-user-primetime {
-			background: url('img/primetime_bot.png') left center no-repeat;
-		}
-		.wchat-user-system {
-			background: url('img/grumpy.png') left center no-repeat;
-			background-size: 13px 13px;
-		}
-		.wchat-user-pes {
-			background: url('img/wow.png') left center no-repeat;
-			background-size: 13px 13px;
-		}
-		
 	.wchat-msg-primetime, .wchat-user-primetime { color: gold; }
 	.wchat-msg-system, .wchat-user-system {
 		color: #f9514d;
-		font-size: 10px;
+		font-size: 11px;
 	}
 	
 	.wchat-msg-ignore.wchat-msg-foruser { background: transparent !important; }
@@ -347,6 +324,20 @@
 	.wchat-msg-ignore .wchat-msg-text { opacity: 0.01; background: transparent !important; }
 	.wchat-msg:hover.wchat-msg-ignore .wchat-msg-text { opacity: 0.3; }
 	
+	.wchat-icon {
+		display: inline-block;
+		width: 14px; height: 14px;
+		
+		vertical-align: middle;
+		
+		background-size: contain;
+		background-position: center;
+		background-repeat: no-repeat;
+	}	
+	.wchat-icon-system { background-image: url('img/grumpy.png'); }
+	.wchat-icon-pes { background-image: url('img/wow.png'); }
+	.wchat-icon-primetime { background-image: url('img/primetime_bot.png'); }
+	.wchat-icon-topsupporter { background-image: url('img/donate_01.png'); }
 	
 /* ====== friends msg styles ====== */
 	/* === default === OK */
@@ -584,11 +575,22 @@
 			color: #222;
 			background: #693;
 		}
+		#wchat-usermenu-wrapper ul li a { 
+			color: inherit; 
+			
+			-o-transition: none;
+			-webkit-transition: none;
+			transition: none;
+		}
+			#wchat-usermenu-wrapper ul li a:hover { 
+				color: inherit;	
+			}
 		
 	.wchat-usermenu-content {
 		color: #669933;
 		font-size: 11px;
 	}
+
 	.wchat-usermenu-banmenu { 
 		display: none; 
 		padding: 4px;

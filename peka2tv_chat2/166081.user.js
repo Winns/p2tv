@@ -8,7 +8,7 @@
 // @include     http://sc2tv.ru/*
 // @match 		http://chat.sc2tv.ru/*
 // @match 		http://sc2tv.ru/*
-// @version     2.0.29
+// @version     2.0.30
 // @updateURL	https://raw.githubusercontent.com/Winns/p2tv/master/peka2tv_chat2/166081.meta.js
 // @downloadURL	https://raw.githubusercontent.com/Winns/p2tv/master/peka2tv_chat2/166081.user.js
 // @grant       GM_addStyle
@@ -71,6 +71,8 @@ function GM_run() {
 						cfgMsgsLimit:			'#wchat-cfg-msgslimit select',
 						cfgFriendsMsgStyle:		'#wchat-cfg-friendsmsgstyle select',
 						cfgForUserMsgStyle:		'#wchat-cfg-forusermsgstyle select',
+						cfgNickColor:			'#wchat-cfg-nickcolor input',
+						cfgNickIcon:			'#wchat-cfg-nickicon input',
 
 						cfgWrapper: 			'#wchat-cfg-wrapper',
 						admWrapper: 			'#wchat-adm-wrapper',
@@ -108,12 +110,14 @@ function GM_run() {
 					messages: null,
 					smiles: unsafeWindow.smiles,
 
-					friendList: JSON.parse( GM_getValue('wchat_friendList') || '{}' ),
-					ignoreList: JSON.parse( GM_getValue('wchat_ignoreList') || '{}' ),
-					smilesSize: GM_getValue('wchat_smilesSize') || 1,
-					fontSize: GM_getValue('wchat_fontSize') || 12,
-					friendsMsgStyle: GM_getValue('wchat_friendsMsgStyle') || 'wchat-msg-friend-style-default',
-					forUserMsgStyle: GM_getValue('wchat_forUserMsgStyle') || 'wchat-msg-foruser-style-default',
+					friendList: 		JSON.parse( GM_getValue('wchat_friendList') || '{}' ),
+					ignoreList: 		JSON.parse( GM_getValue('wchat_ignoreList') || '{}' ),
+					smilesSize: 		GM_getValue('wchat_smilesSize') || 1,
+					fontSize: 			GM_getValue('wchat_fontSize') || 12,
+					friendsMsgStyle: 	GM_getValue('wchat_friendsMsgStyle') || 'wchat-msg-friend-style-default',
+					forUserMsgStyle: 	GM_getValue('wchat_forUserMsgStyle') || 'wchat-msg-foruser-style-default',
+					nickColor: 			GM_getValue('wchat_nickColor') || true,
+					nickIcon: 			GM_getValue('wchat_nickIcon') || true,
 
 					doScroll: true,
 					time: {
@@ -164,11 +168,12 @@ function GM_run() {
 					return html;
 				}
 				templates.chatMSG = function( data ) {
-					var html = '', style = getMessageStyle( data ),
+					var html = '', 
+						messageStyle = getMessageStyle( data ),
 						msgData = 'data-userid="'+ data.uid +'" data-msgid="'+ data.id +'"';
 
-					html += '<div class="wchat-msg '+ style.msg +'" title="'+ data.date +'">';
-					html += 	'<span class="wchat-nick '+ style.nick +'" '+ msgData +' >'+ data.name +'</span> <span class="wchat-msg-text">'+ msg2html(data.message) +'</span>';
+					html += '<div class="wchat-msg '+ messageStyle.msg +'" title="'+ data.date +'">';
+					html += 	'<span class="wchat-nick '+ messageStyle.nick +'" '+ msgData +' >'+ messageStyle.icons +' '+ data.name +'</span> <span class="wchat-msg-text">'+ msg2html(data.message) +'</span>';
 					html += '</div>';
 					
 					return html;
@@ -251,6 +256,14 @@ function GM_run() {
 					html += 						'<option>15</option><option>14</option><option>13</option><option>12</option>';
 					html += 						'<option>11</option><option>10</option><option>9</option><option>8</option>';
 					html += 					'</select>';
+					html += 				'</li>';
+					
+					html += 				'<li id="wchat-cfg-nickcolor">';
+					html += 					'Цветные ники <input type="checkbox">';
+					html += 				'</li>';
+					
+					html += 				'<li id="wchat-cfg-nickicon">';
+					html += 					'Иконки ников <input type="checkbox">';
 					html += 				'</li>';
 					
 					html += 				'<li id="wchat-cfg-msgslimit">';
@@ -383,6 +396,7 @@ function GM_run() {
 					html += 		'<div class="wchat-usermenu-content">';
 					html += 			'<ul>';
 					html += 				'<li data-action="answer">Ответить</li>';
+					html += 				'<li data-action="channel"><a href="" target="_blank">Канал пользователя</a></li>';
 					html += 				'<li data-action="add-to-friends">Добавить в друзья</li>';
 					html += 				'<li data-action="send-private-msg">Послать ЛС</li>';
 					html += 				'<li data-action="banmenu">Забанить</li>';
@@ -624,64 +638,77 @@ function GM_run() {
 				}
 				
 				function getMessageStyle( data ) {
-					var style = { msg: '', nick: '' };
+					var o = { msg: '', nick: '', icons: '' };
 					
-					switch (data.role) {
-						case 'user': 				style.nick = 'wchat-user-default'; break;	
-						case 'userstream-editor': 	style.nick = 'wchat-user-userstream-editor'; break;
-						case 'moderator':			style.nick = 'wchat-user-moderator'; break;
-						case 'editor': 				style.nick = 'wchat-user-editor'; break;
-						case 'root': 				style.nick = 'wchat-user-root'; break;
-						case 'streamer': 			style.nick = 'wchat-user-streamer'; break;
-						case 'prime-streamer':		style.nick = 'wchat-user-primestreamer'; break;
-						
-						case 'admin':
-						case 'color-red': 			style.nick = 'wchat-user-admin'; break;
-						
-						case 'color-purple':		style.nick = 'wchat-user-purple'; break;
-						case 'color-pink':			style.nick = 'wchat-user-pink'; break;
-
-						default: 					style.nick = 'wchat-user-default'; break;
-					}
-					
-					// top supporter
-					if (data.roleIds.indexOf( 24 ) !== -1)
-						style.nick += ' wchat-user-topsupporter';
-
+					// If logged in
 					if (isUserLoggedIn()) {
 						// if @ ignore list
 						if ( cfg.ignoreList.hasOwnProperty(data.uid) )
-							style.msg += ' wchat-msg-ignore';
+							o.msg += ' wchat-msg-ignore';
 
 						// message for you
 						var msgForUserRegExp = new RegExp('\\[b\\]' + escapeData( cfg.userInfo.name ) + '\\[/b\\],','gi');
 						if ( data.message.search( msgForUserRegExp ) != -1 ) {
-							style.msg += ' wchat-msg-foruser '+ cfg.forUserMsgStyle;
+							o.msg += ' wchat-msg-foruser '+ cfg.forUserMsgStyle;
 						} else {
 							// if @ friend list
 							if ( cfg.friendList.hasOwnProperty(data.uid) )
-								style.msg += ' wchat-msg-friend '+ cfg.friendsMsgStyle;
+								o.msg += ' wchat-msg-friend '+ cfg.friendsMsgStyle;
 						}
-
 					}
 					
-					switch( data.uid ) {
+					switch ( data.uid ) {
 						case '-2': 
-							style.msg += ' wchat-msg-primetime'; 
-							style.nick += ' wchat-user-primetime'; 
+							o.msg += ' wchat-msg-primetime'; 
+							o.nick += ' wchat-user-primetime'; 
+							o.icons += '<i class="wchat-icon wchat-icon-primetime"></i> ';
 							break; // primetime bot
 						case '-1': 
-							style.msg += ' wchat-msg-system'; 
-							style.nick += ' wchat-user-system'; 
+							o.msg += ' wchat-msg-system'; 
+							o.nick += ' wchat-user-system'; 
+							o.icons += '<i class="wchat-icon wchat-icon-system"></i> ';
 							break;	// system message	
-							
-						case '51245': 
-							style.nick += ' wchat-user-pes'; 
-							break;	// pes
-							
 					};
 					
-					return style;
+					// If nick colors ON
+					if (cfg.nickColor) {
+						switch (data.role) {
+							case 'user': 				o.nick += 'wchat-user-default'; break;	
+							case 'userstream-editor': 	o.nick += 'wchat-user-userstream-editor'; break;
+							case 'moderator':			o.nick += 'wchat-user-moderator'; break;
+							case 'editor': 				o.nick += 'wchat-user-editor'; break;
+							case 'root': 				o.nick += 'wchat-user-root'; break;
+							case 'streamer': 			o.nick += 'wchat-user-streamer'; break;
+							case 'prime-streamer':		o.nick += 'wchat-user-primestreamer'; break;
+							
+							case 'admin':
+							case 'color-red': 			o.nick += 'wchat-user-admin'; break;
+							
+							case 'color-purple':		o.nick += 'wchat-user-purple'; break;
+							case 'color-pink':			o.nick += 'wchat-user-pink'; break;
+
+							default: 					o.nick += 'wchat-user-default'; break;
+						}
+
+					} else {
+						o.nick = 'wchat-user-default';
+					}
+					
+					// If nick icons ON
+					if (cfg.nickIcon) {
+					
+						// top supporter
+						if (data.roleIds.indexOf( 24 ) !== -1)
+							o.icons += '<i class="wchat-icon wchat-icon-topsupporter"></i> ';
+
+						switch ( data.uid ) {
+							case '51245': 
+								o.icons += '<i class="wchat-icon wchat-icon-pes"></i> ';
+								break;	// pes	
+						};
+					}
+					
+					return o;
 				}
 				
 				function sendMessage() {
@@ -983,6 +1010,10 @@ function GM_run() {
 					
 					$( cfg.el.cfgSmilesSize ).val( cfg.smilesSize );
 					$( cfg.el.cfgFontSize ).val( cfg.fontSize );
+					
+					$( cfg.el.cfgNickColor ).prop('checked', cfg.nickColor);
+					$( cfg.el.cfgNickIcon ).prop('checked', cfg.nickIcon);
+					
 					$( cfg.el.cfgMsgsLimit ).val( cfg.chatMessagesLimit );
 					$( cfg.el.cfgFriendsMsgStyle ).find('option[data-class="'+ cfg.friendsMsgStyle +'"]').attr('selected', 'selected');
 					$( cfg.el.cfgForUserMsgStyle).find('option[data-class="'+ cfg.forUserMsgStyle +'"]').attr('selected', 'selected');
@@ -997,6 +1028,18 @@ function GM_run() {
 					cfg.fontSize = size;
 					
 					$( cfg.el.chat ).css('font-size', cfg.fontSize +'px');
+				}
+				function setNickColor( val ) {
+					GM_setValue( 'wchat_nickColor', val );
+					cfg.nickColor = val;
+					
+					renderMessages( cfg.messages, {scroll: 'off', fade: false, append: false} );
+				}
+				function setNickIcon( val ) {
+					GM_setValue( 'wchat_nickIcon', val );
+					cfg.nickIcon = val;
+					
+					renderMessages( cfg.messages, {scroll: 'off', fade: false, append: false} );
 				}
 				function setMsgsLimit( limit ) {
 					GM_setValue( 'wchat_chatMessagesLimit', limit.toString() );
@@ -1203,6 +1246,17 @@ function GM_run() {
 								}
 								$( cfg.el.userMenu ).find('.wchat-usermenu-content ul li[data-action="add-to-ignore"]').text( text );
 								
+								// Create user channel url
+								var nick = $( cfg.el.userMenuName ).text();
+								nick = 	$.trim( nick )
+										.toLowerCase()
+										.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '')
+										.replace(/ /g, '-');
+										
+								$( cfg.el.userMenu )
+									.find('.wchat-usermenu-content ul li[data-action="channel"] a')
+									.attr( 'href', 'http://sc2tv.ru/channel/'+ nick );
+								
 								userMenuShow();
 							}
 						});
@@ -1282,6 +1336,14 @@ function GM_run() {
 						/* === Font size === */
 						$( cfg.el.cfgFontSize ).on('change', function() {
 							setFontSize( $(this).val() );
+						});
+						/* === Nick color === */
+						$( cfg.el.cfgNickColor ).on('change', function() {
+							setNickColor( this.checked );
+						});
+						/* === Nick icon === */
+						$( cfg.el.cfgNickIcon).on('change', function() {
+							setNickIcon( this.checked );
 						});
 						/* === Messages limit === */
 						$( cfg.el.cfgMsgsLimit ).on('change', function() {
