@@ -8,7 +8,7 @@
 // @include     http://sc2tv.ru/*
 // @match 		http://chat.sc2tv.ru/*
 // @match 		http://sc2tv.ru/*
-// @version     2.0.30
+// @version     2.0.31
 // @updateURL	https://raw.githubusercontent.com/Winns/p2tv/master/peka2tv_chat2/166081.meta.js
 // @downloadURL	https://raw.githubusercontent.com/Winns/p2tv/master/peka2tv_chat2/166081.user.js
 // @grant       GM_addStyle

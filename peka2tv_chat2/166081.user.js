@@ -8,7 +8,7 @@
 // @include     http://sc2tv.ru/*
 // @match 		http://chat.sc2tv.ru/*
 // @match 		http://sc2tv.ru/*
-// @version     2.0.30
+// @version     2.0.31
 // @updateURL	https://raw.githubusercontent.com/Winns/p2tv/master/peka2tv_chat2/166081.meta.js
 // @downloadURL	https://raw.githubusercontent.com/Winns/p2tv/master/peka2tv_chat2/166081.user.js
 // @grant       GM_addStyle
@@ -173,7 +173,7 @@ function GM_run() {
 						msgData = 'data-userid="'+ data.uid +'" data-msgid="'+ data.id +'"';
 
 					html += '<div class="wchat-msg '+ messageStyle.msg +'" title="'+ data.date +'">';
-					html += 	'<span class="wchat-nick '+ messageStyle.nick +'" '+ msgData +' >'+ messageStyle.icons +' '+ data.name +'</span> <span class="wchat-msg-text">'+ msg2html(data.message) +'</span>';
+					html += 	messageStyle.icons +'<span class="wchat-nick '+ messageStyle.nick +'" '+ msgData +' >'+ data.name +'</span> <span class="wchat-msg-text">'+ msg2html(data.message) +'</span>';
 					html += '</div>';
 					
 					return html;
@@ -307,8 +307,8 @@ function GM_run() {
 					html += 				'</li>';
 					
 					html += 				'<li id="wchat-cfg-about">';
-					html += 					'peka2tv chat <a href="http://userscripts.org/scripts/show/166081" target="_blank">v2.x</a><br>';
-					html += 					'Установить старую версию <a href="http://userscripts.org/scripts/show/186199" target="_blank">v1.x</a>';
+					html += 					'peka2tv chat <a href="https://github.com/Winns/p2tv/tree/master/peka2tv_chat2" target="_blank">v2.x</a><br>';
+					html += 					'Установить старую версию <a href="https://github.com/Winns/p2tv/tree/master/peka2tv_chat" target="_blank">v1.x</a>';
 					html += 				'</li>';
 					html += 			'</ul>';
 					html += 		'</div>';
